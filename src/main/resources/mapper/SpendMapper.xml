@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.SpendMapper">
+    <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.Spend">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="date" property="date" jdbcType="DATE"/>
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR"/>
+        <result column="business_type_id" property="businessTypeId" jdbcType="VARCHAR"/>
+        <result column="adPv" property="adpv" jdbcType="DECIMAL"/>
+        <result column="click" property="click" jdbcType="DECIMAL"/>
+        <result column="charge" property="charge" jdbcType="DECIMAL"/>
+        <result column="pageviews" property="pageviews" jdbcType="INTEGER"/>
+        <result column="visitor" property="visitor" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, date, channel_id, business_type_id, adPv, click, charge, pageviews, visitor,
+    status, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from spend
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from spend
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.hhlt.konsultado.entity.Spend">
+        insert into spend (id, date, channel_id,
+                           business_type_id, adPv, click,
+                           charge, pageviews, visitor,
+                           status, create_time, update_time)
+        values (#{id,jdbcType=INTEGER}, #{date,jdbcType=DATE}, #{channelId,jdbcType=VARCHAR},
+                #{businessTypeId,jdbcType=VARCHAR}, #{adpv,jdbcType=DECIMAL}, #{click,jdbcType=DECIMAL},
+                #{charge,jdbcType=DECIMAL}, #{pageviews,jdbcType=INTEGER}, #{visitor,jdbcType=INTEGER},
+                #{status,jdbcType=BIT}, #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.Spend">
+        insert into spend
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+            <if test="channelId != null">
+                channel_id,
+            </if>
+            <if test="businessTypeId != null">
+                business_type_id,
+            </if>
+            <if test="adpv != null">
+                adPv,
+            </if>
+            <if test="click != null">
+                click,
+            </if>
+            <if test="charge != null">
+                charge,
+            </if>
+            <if test="pageviews != null">
+                pageviews,
+            </if>
+            <if test="visitor != null">
+                visitor,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=DATE},
+            </if>
+            <if test="channelId != null">
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="businessTypeId != null">
+                #{businessTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="adpv != null">
+                #{adpv,jdbcType=DECIMAL},
+            </if>
+            <if test="click != null">
+                #{click,jdbcType=DECIMAL},
+            </if>
+            <if test="charge != null">
+                #{charge,jdbcType=DECIMAL},
+            </if>
+            <if test="pageviews != null">
+                #{pageviews,jdbcType=INTEGER},
+            </if>
+            <if test="visitor != null">
+                #{visitor,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hhlt.konsultado.entity.Spend">
+        update spend
+        <set>
+            <if test="date != null">
+                date = #{date,jdbcType=DATE},
+            </if>
+            <if test="channelId != null">
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="businessTypeId != null">
+                business_type_id = #{businessTypeId,jdbcType=VARCHAR},
+            </if>
+            <if test="adpv != null">
+                adPv = #{adpv,jdbcType=DECIMAL},
+            </if>
+            <if test="click != null">
+                click = #{click,jdbcType=DECIMAL},
+            </if>
+            <if test="charge != null">
+                charge = #{charge,jdbcType=DECIMAL},
+            </if>
+            <if test="pageviews != null">
+                pageviews = #{pageviews,jdbcType=INTEGER},
+            </if>
+            <if test="visitor != null">
+                visitor = #{visitor,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.hhlt.konsultado.entity.Spend">
+        update spend
+        set date             = #{date,jdbcType=DATE},
+            channel_id       = #{channelId,jdbcType=VARCHAR},
+            business_type_id = #{businessTypeId,jdbcType=VARCHAR},
+            adPv             = #{adpv,jdbcType=DECIMAL},
+            click            = #{click,jdbcType=DECIMAL},
+            charge           = #{charge,jdbcType=DECIMAL},
+            pageviews        = #{pageviews,jdbcType=INTEGER},
+            visitor          = #{visitor,jdbcType=INTEGER},
+            status           = #{status,jdbcType=BIT},
+            create_time      = #{createTime,jdbcType=VARCHAR},
+            update_time      = #{updateTime,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectSpendList" resultType="com.hhlt.konsultado.entity.Spend">
+        SELECT
+        s.id,s.date,c.channel as channel_id,s.adPv,s.charge,s.click, s.pageviews,t.type as business_type_id,s.visitor,c.id as cID
+        FROM spend AS s
+        LEFT JOIN business_type AS t ON s.business_type_id = t.id
+        LEFT JOIN consulting_channel AS c ON s.channel_id = c.id
+        WHERE s.`status` = '0'
+        <if test="channelId != null and channelId != ''">
+            AND s.channel_id = #{channelId}
+        </if>
+        <if test="typeId != null and typeId != ''">
+            AND s.business_type_id = #{typeId}
+        </if>
+        <if test="beginTime != null and beginTime != ''">
+            and s.date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and s.date &lt;= #{endTime}
+        </if>
+        ORDER by s.date desc
+        limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="selectSpendListTwo" resultType="com.hhlt.konsultado.entity.Spend">
+   SELECT
+	c.channel AS channel_id,
+	t.type AS business_type_id,
+	count(*) as sum
+FROM
+	spend AS s
+LEFT JOIN business_type AS t ON s.business_type_id = t.id
+LEFT JOIN consulting_channel AS c ON s.channel_id = c.id
+WHERE
+	s.`status` = '0'
+GROUP BY
+	s.channel_id,t.type
+   </select>
+
+    <select id="selectSpendListExcel" resultType="com.hhlt.konsultado.entity.Spend">
+        SELECT
+        s.id,s.date,c.channel as channel_id,s.adPv,s.charge,s.click, s.pageviews,t.type as business_type_id,s.visitor,c.id as cID
+        FROM spend AS s
+        LEFT JOIN business_type AS t ON s.business_type_id = t.id
+        LEFT JOIN consulting_channel AS c ON s.channel_id = c.id
+        WHERE s.`status` = '0'
+        <if test="channelId != null and channelId != ''">
+            AND s.channel_id = #{channelId}
+        </if>
+        <if test="typeId != null and typeId != ''">
+            AND s.business_type_id = #{typeId}
+        </if>
+        <if test="beginTime != null and beginTime != ''">
+            and s.date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and s.date &lt;= #{endTime}
+        </if>
+        ORDER by s.date desc
+
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*)
+        from spend
+        where status = '0'
+        <if test="channelId != null and channelId != ''">
+            AND channel_id = #{channelId}
+        </if>
+        <if test="typeId != null and typeId != ''">
+            AND business_type_id = #{typeId}
+        </if>
+        <if test="beginTime != null and beginTime != ''">
+            and date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and date &lt;= #{endTime}
+        </if>
+    </select>
+
+
+
+    <select id="selectSpendGroupBy" resultType="com.hhlt.konsultado.entity.SonSpend"
+            parameterType="com.hhlt.konsultado.entity.Spend">
+        SELECT
+        s.id AS id,
+        c.channel AS channel_id,
+        SUM(s.adPv) AS adPv,
+        SUM(s.charge) AS charge,
+        SUM(s.click) AS click,
+        SUM(s.pageviews) AS pageviews,
+        SUM(s.visitor) AS visitor,
+        s.channel_id as sid,
+        s.date as date
+        FROM
+        spend AS s
+        LEFT JOIN consulting_channel AS c ON s.channel_id = c.id
+        WHERE
+        s.status = '0'
+        <if test="beginTime != null and beginTime != ''">
+            AND s.date >= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND s.date &lt;= #{endTime}
+        </if>
+        GROUP BY
+        s.channel_id
+        ORDER BY s.date ASC
+    </select>
+
+
+    <select id="selectGroupByChannelId" resultType="com.hhlt.konsultado.entity.SonSpend"
+            parameterType="com.hhlt.konsultado.entity.Spend">
+        SELECT
+        s.id AS id,
+        c.channel AS channel_id,
+        SUM(s.adPv )AS adPv,
+        SUM(s.charge) AS charge,
+        SUM(s.click) AS click,
+        SUM(s.pageviews) AS pageviews,
+        SUM(s.visitor) AS visitor,
+        s.date AS date
+        FROM
+        spend AS s
+        LEFT JOIN consulting_channel AS c ON s.channel_id = c.id
+        WHERE
+        s. STATUS = '0'
+        <if test="beginTime != null">
+            AND s.date >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND s.date &lt;= #{endTime}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            AND s.channel_id = #{channelId}
+        </if>
+        GROUP BY
+        s.date
+        ORDER BY
+        s.date ASC
+    </select>
+
+    <select id="consultCount" resultType="com.hhlt.konsultado.response.ConsultCountResponse">
+        select
+        b.date,
+        sum(CASE b.channel_id WHEN 1 THEN b.adPv ELSE 0 END) as beijingBd,
+        sum(CASE b.channel_id WHEN 2 THEN b.adPv ELSE 0 END) as beijing360,
+        sum(CASE b.channel_id WHEN 3 THEN b.adPv ELSE 0 END) as qingdao360,
+        sum(CASE b.channel_id WHEN 4 THEN b.adPv ELSE 0 END) as qingdaoBd,
+        sum(CASE b.channel_id WHEN 5 THEN b.adPv ELSE 0 END) as jinri,
+        sum(CASE b.channel_id WHEN 6 THEN b.adPv ELSE 0 END) as dgpt,
+        sum(CASE b.channel_id WHEN 7 THEN b.adPv ELSE 0 END) as bjService1,
+        sum(CASE b.channel_id WHEN 8 THEN b.adPv ELSE 0 END) as kdfwsc,
+        sum(CASE b.channel_id WHEN 8 THEN b.adPv ELSE 0 END) as zywdqd,
+        sum(CASE b.channel_id WHEN 8 THEN b.adPv ELSE 0 END) as zyyz
+        from (
+        select
+        a.channel_id,a.adPv as adPv,'1' as type,a.date,a.id
+        from spend a
+        union all
+        select
+        a.channel_id,a.click as adPv,'2' AS  type,a.date,a.id
+        from spend a
+        union all
+        select
+        a.channel_id,a.charge as adPv,'3' AS  type,a.date,a.id
+        from spend a
+        union all
+        select
+        a.channel_id,a.pageviews as adPv,'4' AS  type,a.date,a.id
+        from spend a
+        union all
+        select
+        a.channel_id,a.visitor as adPv,'5' AS  type,a.date,a.id
+        from spend a ) b
+        LEFT JOIN consulting_channel as c on c.id = b.channel_id
+        where
+        b.type = #{type}
+        <if test="beginTime != null">
+            AND b.date >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            AND b.date &lt;= #{endTime}
+        </if>
+        GROUP BY
+        b.date
+        order by
+        b.date asc
+    </select>
+    <select id="selectByPrimary" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from spend
+
+    </select>
+</mapper>

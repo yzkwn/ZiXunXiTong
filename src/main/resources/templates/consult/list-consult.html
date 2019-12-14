@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}" type="text/css">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <script type="text/javascript" th:src="@{/js/downFile.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/my/permission.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/jq.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">咨询数据管理</a>
+      </span>
+    <a class="layui-btn layui-btn-primary layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:38px">ဂ</i></a>
+</div>
+<div class="x-body" style="overflow:auto;width:96%">
+    <div class="layui-row">
+        <div class="layui-form layui-col-md12 x-so">
+            <input class="layui-input" placeholder="开始日期" name="start" id="beginTime">
+            <input class="layui-input" placeholder="截止日期" name="end" id="endTime">
+            <div class="layui-input-inline">
+                <select class="form-control" name="business" id="businessType">
+                    <option th:value="null" th:text="请选择业务类型">--请选择业务类型--</option>
+                    <option th:each="bT:${business}" th:value="${bT.id}" th:text="${bT.type }"></option>
+                </select>
+            </div>
+            <div class="layui-input-inline" id="changeChannel">
+                <select class="form-control" name="channels" id="channels">
+                    <option th:value="null" th:text="请选择咨询渠道">--请选择咨询渠道--</option>
+                    <option th:each="ch:${channels}" th:value="${ch.id}" th:text="${ch.channel }"></option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select class="form-control" name="planformid" id="planformid">
+                    <option th:value="null" th:text="请选择分配部门">--请选择分配部门--</option>
+                    <option th:each="cl:${pl}" th:value="${cl.id}" th:text="${cl.platformName }"></option>
+                </select>
+            </div>
+            <input class="layui-input" placeholder="客服姓名" name="servicer" id="servicer">
+            <input class="layui-input" placeholder="搜索" name="search" id="search">
+            <button class="layui-btn" onclick="selectOrder(1, 10);" permission="sys : insert"><i class="layui-icon" permission="sys : insert">&#xe615;</i></button>
+            <button class="layui-btn layui-btn-warm" onclick="exportFile()"><i class="layui-icon">数据下载</i></button>
+
+            <input type="button" class="layui-btn x-right" lay-filter="add"
+                   onclick="admin_show('添加咨询数据','/konsult/consult/add')" id="button" value="添加"/>
+        </div>
+    </div>
+    <xblock>
+        <span class="x-right" style="line-height:40px">共：<span id="total"></span>条</span>
+    </xblock>
+    <table class="layui-table" width="auto" style="white-space:nowrap">
+        <thead>
+        <tr>
+            <th>序号</th>
+            <th>当前客服</th>
+            <th>创建时间</th>
+            <th>客户姓名</th>
+            <th>分配部门</th>
+            <th>业务类型</th>
+            <th>资讯渠道</th>
+            <th>业务员</th>
+            <th>客户电话</th>
+            <th>所在省市</th>
+            <th>商家旺旺ID</th>
+            <th>店铺名称</th>
+            <th>店铺链接</th>
+            <th>微信</th>
+            <th>QQ</th>
+            <th>产品类目</th>
+            <th>客户等级</th>
+            <th>是否电话</th>
+            <th>是否二次</th>
+            <th>产品类目备注</th>
+            <th>咨询日期</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="information">
+
+        </tbody>
+    </table>
+    <div class="page">
+        <div id="demo1"></div>
+    </div>
+
+</div>
+<script>
+    var user = "";
+
+    $(document).ready(function () {
+        selectOrder(1, 10);
+    });
+
+    function fenye(total, curr, limit) {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //总页数大于页码总数
+            laypage.render({
+                elem: 'demo1'
+                , count: total || 0 //数据总数
+                , limit: limit || 10
+                , curr: curr || 1
+                , jump: function (obj, first) {
+                    if (!first) {
+                        selectOrder(obj.curr, obj.limit);
+                    }
+                }
+            });
+        });
+    }
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#beginTime' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endTime' //指定元素
+        });
+    });
+
+    function admin_show(title, url) {
+        x_admin_show(title, url + "?username=" + user.username);
+    }
+
+    function selectOrder(page, size) {
+        var result = '';
+        $.ajax({
+            method: "post",
+            headers: {
+                "contentType": "application/json;charset=UTF-8"
+            },
+            url: "/konsult/consult/listSearch",
+            dataType: 'json',
+            data: {
+                "beginTime": $("#beginTime").val(),
+                "endTime": $("#endTime").val(),
+                "servicer": $("#servicer").val(),
+                "typeId": $('#businessType option:selected').val(),
+                "channelId": $("#channels option:selected").val(),
+                "search": $("#search").val(),
+                "planformId": $("#planformid").val(),
+                "pageSize": size,
+                "pageNo": page
+            },
+            success: function (data) {
+                debugger;
+                var arrLen = data.data.list;
+                var total = data.data.total;
+                user = data.data.user;
+
+
+                if (arrLen.length > 0) {
+                    for (var i = 0; i < arrLen.length; i++) {
+                        if(arrLen[i].city == null){
+                            var c = arrLen[i].storeUrl;
+                            var isT = "是";
+                            var isTw = '是';
+                            var Qq = '';
+                            var beizhu = '';
+                            var sm = '';
+                            if (!arrLen[i].isTelephone) {
+                                isT = ''
+                            }
+                            if (!arrLen[i].isTwice) {
+                                isTw = ''
+                            }
+                            if (null == arrLen[i].salesman || arrLen[i].salesman == '') {
+                                arrLen[i].salesman = sm;
+                            }
+                            if (null == arrLen[i].qq || arrLen[i].qq == '') {
+                                arrLen[i].qq = Qq;
+                            }
+                            if (null == arrLen[i].remarkBeiZhu || arrLen[i].remarkBeiZhu == '') {
+                                arrLen[i].remarkBeiZhu = beizhu;
+                            } else {
+                                if (arrLen[i].remarkBeiZhu.length > 5) {
+                                    arrLen[i].remarkBeiZhu = arrLen[i].remarkBeiZhu.substr(0, 5) + "..."
+                                }
+                            }
+                            if (null != c && c != ''){
+                                if (arrLen[i].storeUrl.length > 10) {
+                                    arrLen[i].storeUrl = arrLen[i].storeUrl.substr(0, 10) + "..."
+                                }
+                            }
+                            if (null != arrLen[i].wangwang && arrLen[i].wangwang != '') {
+                                if (arrLen[i].wangwang.length > 5) {
+                                    arrLen[i].wangwang = arrLen[i].wangwang.substr(0, 5) + "..."
+                                }
+                            }
+                            var edit = '<a title="查看" onclick="x_admin_show(\'查看\',\'/konsult/consult/update?id=' + arrLen[i].id + '\')">' +
+                                '<i class="layui-icon">&#xe63c;</i>' +
+                                '</a>'
+                            var del = '<a title="删除" onclick="deleteData(\'this\',\'' + arrLen[i].id + '\')" href="javascript:;">'
+                                + '<i class="layui-icon">&#xe640;</i>' + '</a>'
+
+                            result += '<tr>' +
+                                '<td>' + arrLen[i].id + '</td>' +
+                                '<td>' + arrLen[i].currentServicer + '</td>' +
+                                '<td>' + arrLen[i].createTime + '</td>' +
+                                '<td>' + arrLen[i].name + '</td>' +
+                                '<td>' + arrLen[i].platName + '</td>' +
+                                '<td>' + arrLen[i].businessType + '</td>' +
+                                '<td>' + arrLen[i].channel + '</td>' +
+                                '<td>' + arrLen[i].salesman + '</td>' +
+                                '<td>' + arrLen[i].telephone + '</td>' +
+                                '<td>' + arrLen[i].province  + '</td>' +
+                                '<td>' + arrLen[i].wangwang + '</td>' +
+                                '<td >' + arrLen[i].storeName + '</td>' +
+                                '<td>' + arrLen[i].storeUrl + '</td>' +
+                                '<td>' + arrLen[i].weixin + '</td>' +
+                                '<td>' + arrLen[i].qq + '</td>' +
+                                '<td>' + arrLen[i].remark + '</td>' +
+                                '<td>' + arrLen[i].levelName + '</td>' +
+                                '<td>' + isT + '</td>' +
+                                '<td>' + isTw + '</td>' +
+                                '<td>' + arrLen[i].remarkBeiZhu + '</td>' +
+                                '<td>' + arrLen[i].consultDate.toString().split(" ")[0] + '</td>' +
+                                '<td>' + edit + del + '</td>' +
+                                '</tr>'
+                        }else{
+                            var c = arrLen[i].storeUrl;
+                            var isT = "是";
+                            var isTw = '是';
+                            var Qq = '';
+                            var beizhu = '';
+                            var sm = '';
+                            if (!arrLen[i].isTelephone) {
+                                isT = ''
+                            }
+                            if (!arrLen[i].isTwice) {
+                                isTw = ''
+                            }
+                            if (null == arrLen[i].salesman || arrLen[i].salesman == '') {
+                                arrLen[i].salesman = sm;
+                            }
+                            if (null == arrLen[i].qq || arrLen[i].qq == '') {
+                                arrLen[i].qq = Qq;
+                            }
+                            if (null == arrLen[i].remarkBeiZhu || arrLen[i].remarkBeiZhu == '') {
+                                arrLen[i].remarkBeiZhu = beizhu;
+                            } else {
+                                if (arrLen[i].remarkBeiZhu.length > 5) {
+                                    arrLen[i].remarkBeiZhu = arrLen[i].remarkBeiZhu.substr(0, 5) + "..."
+                                }
+                            }
+                            if (null != c && c != ''){
+                                if (arrLen[i].storeUrl.length > 10) {
+                                    arrLen[i].storeUrl = arrLen[i].storeUrl.substr(0, 10) + "..."
+                                }
+                            }
+                            if (null != arrLen[i].wangwang && arrLen[i].wangwang != '') {
+                                if (arrLen[i].wangwang.length > 5) {
+                                    arrLen[i].wangwang = arrLen[i].wangwang.substr(0, 5) + "..."
+                                }
+                            }
+                            var edit = '<a title="查看" onclick="x_admin_show(\'查看\',\'/konsult/consult/update?id=' + arrLen[i].id + '\')">' +
+                                '<i class="layui-icon">&#xe63c;</i>' +
+                                '</a>'
+                            var del = '<a title="删除" onclick="deleteData(\'this\',\'' + arrLen[i].id + '\')" href="javascript:;">'
+                                + '<i class="layui-icon">&#xe640;</i>' + '</a>'
+
+                            result += '<tr>' +
+                                '<td>' + arrLen[i].id + '</td>' +
+                                '<td>' + arrLen[i].currentServicer + '</td>' +
+                                '<td>' + arrLen[i].createTime + '</td>' +
+                                '<td>' + arrLen[i].name + '</td>' +
+                                '<td>' + arrLen[i].platName + '</td>' +
+                                '<td>' + arrLen[i].businessType + '</td>' +
+                                '<td>' + arrLen[i].channel + '</td>' +
+                                '<td>' + arrLen[i].salesman + '</td>' +
+                                '<td>' + arrLen[i].telephone + '</td>' +
+                                '<td>' + arrLen[i].province +'/'+ arrLen[i].city + '</td>' +
+                                '<td>' + arrLen[i].wangwang + '</td>' +
+                                '<td >' + arrLen[i].storeName + '</td>' +
+                                '<td>' + arrLen[i].storeUrl + '</td>' +
+                                '<td>' + arrLen[i].weixin + '</td>' +
+                                '<td>' + arrLen[i].qq + '</td>' +
+                                '<td>' + arrLen[i].remark + '</td>' +
+                                '<td>' + arrLen[i].levelName + '</td>' +
+                                '<td>' + isT + '</td>' +
+                                '<td>' + isTw + '</td>' +
+                                '<td>' + arrLen[i].remarkBeiZhu + '</td>' +
+                                '<td>' + arrLen[i].consultDate.toString().split(" ")[0] + '</td>' +
+                                '<td>' + edit + del + '</td>' +
+                                '</tr>'
+                        }
+                    }
+                    $(".information").html(result);
+                    fenye(total, page, size);
+                    $("#total").html(total);
+                } else {
+                    $(".information").html("");
+                    $("#total").html(0);
+                    fenye(0, page, size);
+                }
+            }
+        });
+    }
+
+    function exportFile() {
+        DownLoadFile({
+            url: '/konsult/download/exportFile',
+            data: {
+                "beginTime": $("#beginTime").val(),
+                "endTime": $("#endTime").val(),
+                "servicer": $("#servicer").val(),
+                "typeId": $('#businessType option:selected').val(),
+                "channelId": $("#channels option:selected").val(),
+                "search": $("#search").val()
+            },
+        })
+    }
+
+    function deleteData(obj, id) {
+        layer.confirm('确认要删除吗？', function () {
+            //发异步删除数据
+            $.ajax({
+                url: "/konsult/consult/deleteOne?id=" + id,
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                type: "get",
+                success: function (data) {
+                    if (data.code == 1) {
+                        layer.msg('已删除!', {icon: 1, time: 1000});
+                        selectOrder(1, 10);
+                    } else {
+                        layer.msg('删除失败!', {icon: 1, time: 1000});
+                        selectOrder(1, 10);
+                    }
+
+                },
+            });
+        });
+    }
+</script>
+</body>
+
+</html>

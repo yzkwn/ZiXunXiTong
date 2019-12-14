@@ -1,0 +1,843 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.MsgCallbackMapper" >
+
+  <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.FixedDistribution" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="operate1" property="operate1" jdbcType="DOUBLE" />
+    <result column="operate2" property="operate2" jdbcType="DOUBLE" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+
+
+
+  </resultMap>
+
+  <select id="selectVisitor" resultType="com.hhlt.konsultado.entity.Visitor">
+      select * from visitor
+  </select>
+
+  <select id="selectdiaologs" resultType="com.hhlt.konsultado.entity.BusinessCard">
+SELECT
+    b.col1,
+    b.linkman,
+    b.addtime,
+    v.rec_id
+    FROM visitor as v ,business_card as b
+WHERE  v.visitor_id = b.visitor_id
+AND
+    v.flag = '0'
+    AND v.connection_times &lt; 3
+  </select>
+
+
+
+  <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.Visitor" >
+    insert into visitor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="recId != null" >
+        rec_id,
+      </if>
+      <if test="siteId != null" >
+        site_id,
+      </if>
+      <if test="siteName != null" >
+        site_name,
+      </if>
+      <if test="info != null" >
+        info,
+      </if>
+      <if test="browser != null" >
+        browser,
+      </if>
+      <if test="operatingSystem != null" >
+        operating_system,
+      </if>
+      <if test="preVisitPages != null" >
+        pre_visit_pages,
+      </if>
+      <if test="curVisitorPages != null" >
+        cur_visitor_pages,
+      </if>
+      <if test="curFirstViewPage != null" >
+        cur_first_view_page,
+      </if>
+      <if test="diaPage != null" >
+        dia_page,
+      </if>
+      <if test="totalVisitTime != null" >
+        total_visit_time,
+      </if>
+      <if test="preVisitTime != null" >
+        pre_visit_time,
+      </if>
+      <if test="firstVisitTime != null" >
+        first_visit_time,
+      </if>
+      <if test="dialogType != null" >
+        dialog_type,
+      </if>
+      <if test="joinCsIds != null" >
+        join_cs_ids,
+      </if>
+      <if test="firstCsId != null" >
+        first_cs_id,
+      </if>
+      <if test="keyword != null" >
+        keyword,
+      </if>
+      <if test="searchEngine != null" >
+        search_engine,
+      </if>
+      <if test="sourceType != null" >
+        source_type,
+      </if>
+      <if test="sourceUrl != null" >
+        source_url,
+      </if>
+      <if test="csSendNum != null" >
+        cs_send_num,
+      </if>
+      <if test="visitorSendNum != null" >
+        visitor_send_num,
+      </if>
+      <if test="terminalType != null" >
+        terminal_type,
+      </if>
+      <if test="diaEndTime != null" >
+        dia_end_time,
+      </if>
+      <if test="diaStartTime != null" >
+        dia_start_time,
+      </if>
+      <if test="endType != null" >
+        end_type,
+      </if>
+      <if test="requestType != null" >
+        request_type,
+      </if>
+      <if test="sourceIpInfo != null" >
+        source_ip_info,
+      </if>
+      <if test="sourceProvince != null" >
+        source_province,
+      </if>
+      <if test="sourceIp != null" >
+        source_ip,
+      </if>
+      <if test="curStayTime != null" >
+        cur_stay_time,
+      </if>
+      <if test="curEnterTime != null" >
+        cur_enter_time,
+      </if>
+      <if test="visitorName != null" >
+        visitor_name,
+      </if>
+      <if test="visitorId != null" >
+        visitor_id,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="connectionTimes != null" >
+        connection_times,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="recId != null" >
+        #{recId,jdbcType=BIGINT},
+      </if>
+      <if test="siteId != null" >
+        #{siteId,jdbcType=INTEGER},
+      </if>
+      <if test="siteName != null" >
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="info != null" >
+        #{info,jdbcType=VARCHAR},
+      </if>
+      <if test="browser != null" >
+        #{browser,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingSystem != null" >
+        #{operatingSystem,jdbcType=VARCHAR},
+      </if>
+      <if test="preVisitPages != null" >
+        #{preVisitPages,jdbcType=INTEGER},
+      </if>
+      <if test="curVisitorPages != null" >
+        #{curVisitorPages,jdbcType=INTEGER},
+      </if>
+      <if test="curFirstViewPage != null" >
+        #{curFirstViewPage,jdbcType=VARCHAR},
+      </if>
+      <if test="diaPage != null" >
+        #{diaPage,jdbcType=VARCHAR},
+      </if>
+      <if test="totalVisitTime != null" >
+        #{totalVisitTime,jdbcType=INTEGER},
+      </if>
+      <if test="preVisitTime != null" >
+        #{preVisitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstVisitTime != null" >
+        #{firstVisitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogType != null" >
+        #{dialogType,jdbcType=VARCHAR},
+      </if>
+      <if test="joinCsIds != null" >
+        #{joinCsIds,jdbcType=VARCHAR},
+      </if>
+      <if test="firstCsId != null" >
+        #{firstCsId,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null" >
+        #{keyword,jdbcType=VARCHAR},
+      </if>
+      <if test="searchEngine != null" >
+        #{searchEngine,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null" >
+        #{sourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceUrl != null" >
+        #{sourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="csSendNum != null" >
+        #{csSendNum,jdbcType=INTEGER},
+      </if>
+      <if test="visitorSendNum != null" >
+        #{visitorSendNum,jdbcType=INTEGER},
+      </if>
+      <if test="terminalType != null" >
+        #{terminalType,jdbcType=VARCHAR},
+      </if>
+      <if test="diaEndTime != null" >
+        #{diaEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="diaStartTime != null" >
+        #{diaStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endType != null" >
+        #{endType,jdbcType=VARCHAR},
+      </if>
+      <if test="requestType != null" >
+        #{requestType,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceIpInfo != null" >
+        #{sourceIpInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceProvince != null" >
+        #{sourceProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceIp != null" >
+        #{sourceIp,jdbcType=VARCHAR},
+      </if>
+      <if test="curStayTime != null" >
+        #{curStayTime,jdbcType=INTEGER},
+      </if>
+      <if test="curEnterTime != null" >
+        #{curEnterTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="visitorName != null" >
+        #{visitorName,jdbcType=VARCHAR},
+      </if>
+      <if test="visitorId != null" >
+        #{visitorId,jdbcType=VARCHAR},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="connectionTimes != null" >
+        #{connectionTimes,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="insertVisitor" parameterType="java.util.HashMap" >
+    insert into visitor(
+    <if test="visitorId != null and visitorId!=''">
+      visitor_id,
+    </if>
+    <if test="visitorName != null and visitorName!=''">
+      visitor_name,
+    </if>
+    <if test="curEnterTime != null and curEnterTime!=''">
+      cur_enter_time,
+    </if>
+    <if test="curStayTime != null and curStayTime!=''">
+      cur_stay_time,
+    </if>
+    <if test="sourceIp != null and sourceIp!='' ">
+      source_ip,
+    </if>
+    <if test="sourceProvince != null and sourceProvince!=''">
+      source_province,
+    </if>
+    <if test="sourceIpInfo != null and sourceIpInfo!=''">
+      source_ip_info,
+    </if>
+    <if test="requestType != null and requestType!='' ">
+      request_type,
+    </if>
+    <if test="endType != null and endType!='' ">
+      end_type,
+    </if>
+    <if test="diaStartTime != null and diaStartTime != ''">
+      dia_start_time,
+    </if>
+    <if test="diaEndTime != null and diaEndTime!=''">
+      dia_end_time,
+    </if>
+    <if test="terminalType != null and terminalType!=''">
+      terminal_type,
+    </if>
+    <if test="visitorSendNum != null and visitorSendNum!=''">
+      visitor_send_num,
+    </if>
+    <if test="csSendNum != null and csSendNum!=''">
+      cs_send_num,
+    </if>
+    <if test="sourceUrl != null and sourceUrl!=''">
+      source_url,
+    </if>
+    <if test="sourceType != null and sourceType!='' ">
+      source_type,
+    </if>
+    <if test="searchEngine != null and searchEngine!=''">
+      search_engine,
+    </if>
+    <if test="keyword != null and keyword!=''">
+      keyword,
+    </if>
+    <if test="firstCsId != null and firstCsId!=''">
+      first_cs_id,
+    </if>
+    <if test="joinCsIds != null and joinCsIds!=''">
+      join_cs_ids,
+    </if>
+    <if test="dialogType != null and dialogType!=''">
+      dialog_type,
+    </if>
+    <if test="firstVisitTime != null and firstVisitTime!=''">
+      first_visit_time,
+    </if>
+    <if test="preVisitTime != null and preVisitTime != ''">
+      pre_visit_time,
+    </if>
+    <if test="totalVisitTime != null and totalVisitTime!=''">
+      total_visit_time,
+    </if>
+    <if test="diaPage != null and diaPage!=''">
+      dia_page,
+    </if>
+    <if test="curFirstViewPage != null and curFirstViewPage!=''">
+      cur_first_view_page,
+    </if>
+    <if test="curVisitorPages != null and curVisitorPages!=''">
+      cur_visitor_pages,
+    </if>
+    <if test="preVisitPages != null and preVisitPages!='' ">
+      pre_visit_pages,
+    </if>
+    <if test="operatingSystem != null and operatingSystem!=''">
+      operating_system,
+    </if>
+    <if test="browser != null and browser!=''">
+      browser,
+    </if>
+    <if test="info != null and info!='' ">
+      info,
+    </if>
+    <if test="siteName != null and siteName!=''">
+      site_name,
+    </if>
+    <if test="siteId != null and siteId!=''">
+      site_id,
+    </if>
+    <if test="recId != null and recId!=''">
+      rec_id
+    </if>
+    ) values
+    (
+    <if test="visitorId != null and visitorId!=''">
+      #{visitorId},
+    </if>
+    <if test="visitorName != null and visitorName!=''">
+      #{visitorName},
+    </if>
+    <if test="curEnterTime != null and curEnterTime!='' ">
+      #{curEnterTime},
+    </if>
+    <if test="curStayTime != null and curStayTime!=''">
+      #{curStayTime},
+    </if>
+    <if test="sourceIp != null and sourceIp!=''">
+      #{sourceIp},
+    </if>
+    <if test="sourceProvince != null and sourceProvince!=''">
+      #{sourceProvince},
+    </if>
+    <if test="sourceIpInfo != null and sourceIpInfo!=''">
+      #{sourceIpInfo},
+    </if>
+    <if test="requestType != null and requestType!=''">
+      #{requestType},
+    </if>
+    <if test="endType != null and endType!=''">
+      #{endType},
+    </if>
+    <if test="diaStartTime != null and diaStartTime !=''">
+      #{diaStartTime},
+    </if>
+    <if test="diaEndTime != null and diaEndTime!=''">
+      #{diaEndTime},
+    </if>
+    <if test="terminalType != null and terminalType!=''">
+      #{terminalType},
+    </if>
+    <if test="visitorSendNum != null and visitorSendNum!=''">
+      #{visitorSendNum},
+    </if>
+    <if test="csSendNum != null and csSendNum!=''">
+      #{csSendNum},
+    </if>
+    <if test="sourceUrl != null and sourceUrl!=''">
+      #{sourceUrl},
+    </if>
+    <if test="sourceType != null and sourceType!=''">
+      #{sourceType},
+    </if>
+    <if test="searchEngine != null and searchEngine!='' ">
+      #{searchEngine},
+    </if>
+    <if test="keyword != null and keyword!='' ">
+      #{keyword},
+    </if>
+    <if test="firstCsId != null and firstCsId!=''">
+      #{firstCsId},
+    </if>
+    <if test="joinCsIds != null and joinCsIds!=''">
+      #{joinCsIds},
+    </if>
+    <if test="dialogType != null and dialogType!=''">
+      #{dialogType},
+    </if>
+    <if test="firstVisitTime != null and firstVisitTime!=''">
+      #{firstVisitTime},
+    </if>
+    <if test="preVisitTime != null and preVisitTime != ''">
+      #{preVisitTime},
+    </if>
+    <if test="totalVisitTime != null and totalVisitTime != ''">
+      #{totalVisitTime},
+    </if>
+    <if test="diaPage != null and diaPage!=''">
+      #{diaPage},
+    </if>
+    <if test="curFirstViewPage != null and curFirstViewPage!=''">
+      #{curFirstViewPage},
+    </if>
+    <if test="curVisitorPages != null and curVisitorPages!=''">
+      #{curVisitorPages},
+    </if>
+    <if test="preVisitPages != null and preVisitPages!=''">
+      #{preVisitPages},
+    </if>
+    <if test="operatingSystem != null and operatingSystem!=''">
+      #{operatingSystem},
+    </if>
+    <if test="browser != null and browser!=''">
+      #{browser},
+    </if>
+    <if test="info != null and info!=''">
+      #{info},
+    </if>
+    <if test="siteName != null and siteName!='' ">
+      #{siteName},
+    </if>
+    <if test="siteId != null and siteId!=''">
+      #{siteId},
+    </if>
+    <if test="recId != null and recId!='' ">
+      #{recId}
+    </if>
+    )
+  </insert>
+
+  <insert id="insertDialogs" parameterType="java.util.HashMap" >
+    insert into dialogs(
+    <if test="subType != null and subType!='' ">
+      sub_type,
+    </if>
+    <if test="flag != null and flag!='' ">
+      flag,
+    </if>
+    <if test="connectionTimes != null and connectionTimes!='' ">
+      connection_times,
+    </if>
+    <if test="sender != null and sender!='' ">
+      sender,
+    </if>
+    <if test="recType != null and recType!='' ">
+      rec_type,
+    </if>
+    <if test="recId != null and recId!='' ">
+      rec_id,
+    </if>
+    <if test="recContent != null and recContent!='' ">
+      rec_content,
+    </if>
+    <if test="addTime != null and addTime!='' ">
+      add_time,
+    </if>
+    <if test="dialogId != null and dialogId!='' ">
+      dialog_id,
+    </if>
+    <if test="id != null and id!='' ">
+      id
+    </if>
+    ) values (
+    <if test="subType != null and subType!='' ">
+      #{subType},
+    </if>
+    <if test="flag != null and flag!='' ">
+      #{flag},
+    </if>
+    <if test="connectionTimes != null and connectionTimes!='' ">
+      #{connection_times},
+    </if>
+    <if test="sender != null and sender!='' ">
+      #{sender},
+    </if>
+    <if test="recType != null and recType!='' ">
+      #{recType},
+    </if>
+    <if test="recId != null and recId!='' ">
+      #{recId},
+    </if>
+    <if test="recContent != null and recContent!='' ">
+      #{recContent},
+    </if>
+    <if test="addTime != null and addTime!='' ">
+      #{addTime},
+    </if>
+    <if test="dialogId != null and dialogId!='' ">
+      #{dialogId},
+    </if>
+    <if test="id != null and id!='' ">
+      #{id}
+    </if>
+    )
+  </insert>
+
+<update id="updateflag" parameterType="com.hhlt.konsultado.entity.Visitor">
+  update visitor set
+  <if test="flag != null ">
+    flag=#{flag},
+  </if>
+  <if test="connectionTimes != null">
+      connection_times=#{connectionTimes}
+  </if>
+  where rec_id = #{recId}
+</update>
+
+
+  <select id="selectByVisitorId" parameterType="java.lang.String" resultType="java.util.HashMap">
+    select  * from business_card where visitor_id = #{visitorId}
+  </select>
+
+  <update id="updateBusinessCard" parameterType="java.util.HashMap">
+    update business_card set
+    <if test="nickName != null and nickName != ''">
+      nick_name=#{nickName},
+    </if>
+    <if test="userName != null and userName != ''">
+      user_name=#{userName},
+    </if>
+    <if test="loginName != null and loginName != ''">
+      login_name=#{loginName},
+    </if>
+    <if test="siteId != null and siteId != ''">
+      site_id=#{siteId},
+    </if>
+    <if test="qq != null and qq != ''">
+      qq=#{qq},
+    </if>
+    <if test="mobile != null and mobile != ''">
+      mobile=#{mobile},
+    </if>
+    <if test="linkman != null and linkman != ''">
+      linkman=#{linkman},
+    </if>
+    <if test="addtime != null and addtime != ''">
+      addtime=#{addtime},
+    </if>
+    <if test="lastChangeTime != null and lastChangeTime != ''">
+      last_change_time=#{lastChangeTime},
+    </if>
+    <if test="cusType != null and cusType != ''">
+      cus_type=#{cusType},
+    </if>
+    <if test="compName != null and compName != ''">
+      comp_name=#{compName},
+    </if>
+    <if test="col1 != null and col1 != ''">
+      col1=#{col1},
+    </if>
+    <if test="msn != null and msn != ''">
+      msn=#{msn},
+    </if>
+    <if test="compId != null and compId != ''">
+      comp_id=#{compId}
+    </if>
+      where visitor_id = #{visitorId}
+  </update>
+  <insert id="insertBusinessCard" parameterType="java.util.HashMap" >
+    insert into business_card(
+    <if test="nickName != null and nickName != ''">
+      nick_name,
+    </if>
+    <if test="userName != null and userName != ''">
+      user_name,
+    </if>
+    <if test="loginName != null and loginName != ''">
+      login_name,
+    </if>
+    <if test="siteId != null and siteId != ''">
+      site_id,
+    </if>
+    <if test="qq != null and qq != ''">
+      qq,
+    </if>
+    <if test="mobile != null and mobile != ''">
+      mobile,
+    </if>
+    <if test="linkman != null and linkman != ''">
+      linkman,
+    </if>
+    <if test="addtime != null and addtime != ''">
+      addtime,
+    </if>
+    <if test="lastChangeTime != null and lastChangeTime != ''">
+      last_change_time,
+    </if>
+    <if test="cusType != null and cusType != ''">
+      cus_type,
+    </if>
+    <if test="compName != null and compName != ''">
+      comp_name,
+    </if>
+    <if test="compId != null and compId != ''">
+      comp_id,
+    </if>
+    <if test="col1 != null and col1 != ''">
+      col1,
+    </if>
+    <if test="msn != null and msn != ''">
+      msn,
+    </if>
+    <if test="col2 != null and col2 != ''">
+      col2,
+    </if>
+    <if test="visitorId != null and visitorId != ''">
+      visitor_id
+    </if>
+    ) values
+    (
+    <if test="nickName != null and nickName != ''">
+      #{nickName},
+    </if>
+    <if test="userName != null and userName != ''">
+      #{userName},
+    </if>
+    <if test="loginName != null and loginName != ''">
+      #{loginName},
+    </if>
+    <if test="siteId != null and siteId != ''">
+      #{siteId},
+    </if>
+    <if test="qq != null and qq != ''">
+      #{qq},
+    </if>
+    <if test="mobile != null and mobile != ''">
+      #{mobile},
+    </if>
+    <if test="linkman != null and linkman != ''">
+      #{linkman},
+    </if>
+    <if test="addtime != null and addtime != ''">
+      #{addtime},
+    </if>
+    <if test="lastChangeTime != null and lastChangeTime != ''">
+      #{lastChangeTime},
+    </if>
+    <if test="cusType != null and cusType != ''">
+      #{cusType},
+    </if>
+    <if test="compName != null and compName != ''">
+      #{compName},
+    </if>
+    <if test="compId != null and compId != ''">
+      #{compId},
+    </if>
+    <if test="col1 != null and col1 != ''">
+      #{col1},
+    </if>
+    <if test="msn != null and msn != ''">
+      #{msn},
+    </if>
+    <if test="col2 != null and col2 != ''">
+      #{col2},
+    </if>
+    <if test="visitorId != null and visitorId != ''">
+      #{visitorId}
+    </if>
+    )
+  </insert>
+
+  <insert id="insertdatalog" parameterType="java.util.HashMap">
+    insert into logdata (rec_id,create_time,error) values (#{recId},#{create_time},#{error})
+  </insert>
+
+  <insert id="insertrecid" parameterType="java.lang.String">
+    insert into recid (recid) values (#{recid})
+  </insert>
+    
+    
+    <select id="insertYongHu" resultType="com.hhlt.konsultado.entity.CardVisitor">
+        SELECT
+        b.*,
+        v.rec_id,
+        v.source_url,
+        v.first_cs_id
+        FROM visitor as v ,business_card as b
+        WHERE  v.visitor_id = b.visitor_id
+    </select>
+
+  <select id="selectKey" resultType="com.hhlt.konsultado.entity.Recid" parameterType="java.lang.String">
+    SELECT * from recid where recid = #{recid}
+  </select>
+
+  <update id="updateKey" parameterType="java.lang.String">
+    UPDATE recid SET recid = #{recid} WHERE recid = #{recid}
+  </update>
+
+  <select id="selectRecId" resultType="com.hhlt.konsultado.entity.Visitor" parameterType="java.lang.Long">
+    SELECT rec_id FROM visitor WHERE rec_id = #{recId,jdbcType=BIGINT}
+  </select>
+
+  <update id="updateKeyVisitor" parameterType="java.lang.Long">
+    UPDATE visitor SET rec_id = #{recid} WHERE rec_id = #{recid}
+  </update>
+
+  <select id="selectID" resultType="com.hhlt.konsultado.entity.Dialogs" parameterType="java.lang.Long" >
+    select
+    *
+    from dialogs
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <update id="updateKeyDialogs" parameterType="java.lang.Long">
+    UPDATE dialogs SET id = #{id} WHERE id = #{id}
+  </update>
+
+  <insert id="insertSelectiveDialogs" parameterType="com.hhlt.konsultado.entity.Dialogs" >
+    insert into dialogs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="subType != null" >
+        sub_type,
+      </if>
+      <if test="sender != null" >
+        sender,
+      </if>
+      <if test="recType != null" >
+        rec_type,
+      </if>
+      <if test="recId != null" >
+        rec_id,
+      </if>
+      <if test="recContent != null" >
+        rec_content,
+      </if>
+      <if test="addTime != null" >
+        add_time,
+      </if>
+      <if test="dialogId != null" >
+        dialog_id,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="connectionTimes != null" >
+        connection_times,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="subType != null" >
+        #{subType,jdbcType=VARCHAR},
+      </if>
+      <if test="sender != null" >
+        #{sender,jdbcType=VARCHAR},
+      </if>
+      <if test="recType != null" >
+        #{recType,jdbcType=INTEGER},
+      </if>
+      <if test="recId != null" >
+        #{recId,jdbcType=BIGINT},
+      </if>
+      <if test="recContent != null" >
+        #{recContent,jdbcType=VARCHAR},
+      </if>
+      <if test="addTime != null" >
+        #{addTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dialogId != null" >
+        #{dialogId,jdbcType=BIGINT},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="connectionTimes != null" >
+        #{connectionTimes,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+
+  <select id="selectBusinessTypeKey" resultType="com.hhlt.konsultado.entity.BusinessCard" parameterType="java.lang.String">
+    select * FROM business_card where visitor_id = #{visitorId}
+  </select>
+
+  <update id="updateBusinessTypeKey" parameterType="java.lang.String">
+    UPDATE business_card SET visitor_id = #{visitor_id} WHERE visitor_id = #{visitorId}
+  </update>
+</mapper>

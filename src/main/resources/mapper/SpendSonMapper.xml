@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.SpendSonMapper" >
+  <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.SpendSon" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="date" property="date" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="looks" property="looks" jdbcType="VARCHAR" />
+    <result column="visitors" property="visitors" jdbcType="VARCHAR" />
+    <result column="type_id" property="typeId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, date, channel_id, looks, visitors,type_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from spend_son
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from spend_son
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hhlt.konsultado.entity.SpendSon" >
+    insert into spend_son (id, date, channel_id, 
+      looks, visitors)
+    values (#{id,jdbcType=INTEGER}, #{date,jdbcType=VARCHAR}, #{channelId,jdbcType=INTEGER}, 
+      #{looks,jdbcType=VARCHAR}, #{visitors,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.SpendSon" >
+    insert into spend_son
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="looks != null" >
+        looks,
+      </if>
+      <if test="visitors != null" >
+        visitors,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="looks != null" >
+        #{looks,jdbcType=VARCHAR},
+      </if>
+      <if test="visitors != null" >
+        #{visitors,jdbcType=VARCHAR},
+      </if>
+      <if test="visitors != null" >
+        #{typeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhlt.konsultado.entity.SpendSon" >
+    update spend_son
+    <set >
+      <if test="date != null" >
+        date = #{date,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="looks != null" >
+        looks = #{looks,jdbcType=VARCHAR},
+      </if>
+      <if test="visitors != null" >
+        visitors = #{visitors,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hhlt.konsultado.entity.SpendSon" >
+    update spend_son
+    set date = #{date,jdbcType=VARCHAR},
+      channel_id = #{channelId,jdbcType=INTEGER},
+      looks = #{looks,jdbcType=VARCHAR},
+      visitors = #{visitors,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectList" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+ SELECT
+	ss.date,
+	ss.looks,
+	ss.visitors,
+	c.channel AS channel_id,
+    t.type as type_id
+FROM
+	spend_son AS ss
+LEFT JOIN consulting_channel AS c ON ss.channel_id = c.id
+LEFT JOIN business_type as t ON t.id = ss.type_id
+ORDER BY ss.date DESC
+LIMIT #{pageNum},#{pageSize}
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select
+ COUNT(*)
+    from spend_son
+  </select>
+
+</mapper>

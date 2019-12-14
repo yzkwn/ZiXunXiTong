@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login/login.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+</head>
+
+<body>
+<div class="top">洪海龙腾&nbsp;·&nbsp;用数据改变未来</div>
+<div class="content">
+    <!-- 登陆 -->
+    <div class="login">
+        <form id="login-form" method="post" onsubmit="return false;">
+            <div class="title">登录</div>
+            <div class="line">
+                <img class="smallImg" th:src="@{/images/icon1.png}"/>
+                <input placeholder="请输入账号" type="text" id="username" name="username"/>
+            </div>
+            <div class="line">
+                <img class="smallImg" th:src="@{/images/icon2.png}"/>
+                <input placeholder="请输入密码" type="password" id="password" name="password"/>
+            </div>
+            <div class="alignment">
+            </div>
+            <button type="button" class="logBut" onclick="login();">登&nbsp;&nbsp;录</button>
+        </form>
+    </div>
+</div>
+<script>
+
+    var token = localStorage.getItem("token");
+
+
+    document.onkeydown = function(e){
+        var e = window.event ? window.event:e;
+        if(e.keyCode == 13){
+            login();
+           }
+    }
+
+    if (token != null && token.trim().length != 0) {
+        $.ajax({
+            type : 'get',
+            url : '/konsult/users/current?token=' + token,
+            success : function(data) {
+                location.href = '/konsult/index.html';
+            },
+            error : function(xhr, textStatus, errorThrown) {
+                var msg = xhr.responseText;
+                var response = JSON.parse(msg);
+                var code = response.code;
+                var message = response.message;
+                if (code == 401) {
+                    localStorage.removeItem("token");
+                }
+            }
+        });
+    }
+
+    function login(obj) {
+        // $(obj).attr("disabled", true);
+
+        var username = $.trim($('#username').val());
+        var password = $.trim($('#password').val());
+
+        if (username == "" || password == "") {
+            $("#info").html('用户名或者密码不能为空');
+            $(obj).attr("disabled", false);
+        } else {
+            console.log( $("#login-form").serialize()),
+            $.ajax({
+                type : 'post',
+                url : '/konsult/login',
+                data : $("#login-form").serialize(),
+                success : function(data) {
+                    localStorage.setItem("token", data.token);
+                    location.href = '/konsult/index.html';
+                },
+                error : function(xhr, textStatus, errorThrown) {
+                    var msg = xhr.responseText;
+                    var response = JSON.parse(msg);
+                    $("#info").html(response.message);
+                    $(obj).attr("disabled", false);
+                }
+            });
+
+        }
+    }
+</script>
+</body>
+
+</html>

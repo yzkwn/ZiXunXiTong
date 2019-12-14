@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!--<meta name="viewport"-->
+          <!--content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>-->
+    <link rel="shortcut icon" th:href="@{/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}" type="text/css">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <link rel="shortcut icon" th:href="@{/layui/css/layui.css}" type="image/x-icon"/>
+    <script type="text/javascript" th:src="@{/layuis/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/my/permission.js}"></script>
+    <script type="text/javascript" th:src="@{/js/downFile.js}"></script>
+    <script type="text/javascript" th:src="@{/js/returnFloat.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/jq.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb" style="visibility: visible;">
+        <a href="">首页</a><span lay-separator="">/</span>
+        <a href="">花费数据</a><span lay-separator="">/</span>
+        <a>
+          <cite>花费列表查询</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-primary layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:38px">ဂ</i></a>
+</div>
+<div class="layui-row">
+    <div class="layui-form layui-col-md12 x-so">
+        <input class="layui-input" placeholder="开始日期" name="start" id="beginTime">
+        <input class="layui-input" placeholder="截止日期" name="end" id="endTime">
+        <div class="layui-input-inline">
+            <select class="form-control" onchange="z()" name="business" id="businessType1" >
+                <option th:value="null" th:text="请选择查找类型">--请选择查找类型--</option>
+                <option th:value="1" th:text="展现量"></option>
+                <option th:value="2" th:text="点击量"></option>
+                <option th:value="3" th:text="花费"></option>
+                <!--<option th:value="4" th:text="浏览量"></option>-->
+                <!--<option th:value="5" th:text="访客数"></option>-->
+            </select>
+        </div>
+        <div class="layui-input-inline" id="changeChannel">
+            <select class="form-control" name="channels" id="channels">
+                <option th:value="null" th:text="请选择咨询渠道">--请选择咨询渠道--</option>
+                <option th:each="item:${SpendChanne}" th:value="${item.id}" th:text="${item.channel}"></option>
+            </select>
+        </div>
+        <div class="layui-input-inline" id="date">
+
+        </div>
+        <button class="layui-btn" onclick="selectOrder(1, 20);" permission="sys : insert"><i class="layui-icon" permission="sys : insert">&#xe615;</i></button>
+    </div>
+
+    <table class="layui-table" width="auto" style="white-space:nowrap" id="listshow">
+        <thead>
+        <tr>
+            <th>渠道</th>
+            <th>展现数量</th>
+            <th>点击量</th>
+            <th>消费</th>
+            <!--<th>浏览量</th>-->
+            <!--<th>访客数</th>-->
+            <th>余额</th>
+        </tr>
+        </thead>
+
+
+        <tbody class="information">
+
+        </tbody>
+
+        <thead class="informationL">
+        <tr>
+
+        </tr>
+        </thead>
+
+    </table>
+    <div class="page">
+        <div id="demo1"></div>
+    </div>
+</div>
+<xblock>
+    <!-- <span class="x-right" style="line-height:40px">共：<span id="total"></span>条</span>-->
+</xblock>
+<script>
+    var pers = checkPermission();
+
+    $(document).ready(function () {
+        selectOrder();
+        z()
+    });
+
+
+    function z() {
+        var value = $("#businessType1").val();
+        var value2 = $("#channels").val();
+        if (value != "") {
+            $("#channels").attr("disabled", "true");
+        }
+        if(value2 != ""){
+            $("#businessType1").attr("disabled", "true");
+        }
+    }
+
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#beginTime' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endTime' //指定元素
+        });
+    });
+
+
+    function selectOrder() {
+        var result = '';
+        var results = '';
+        // debugger;
+        var channelId = $("#channels option:selected").val();
+        var type = $("#businessType1 option:selected").val();
+        var beginTime = $("#beginTime").val();
+        var endtime = $("#endTime").val();
+        if(type != "" && channelId != ""){
+            layui.use('layer', function () {
+                layer.msg('请只选择一组下拉框进行筛选！')
+            });
+            return null;
+        }
+        if (beginTime == "" || endtime == "") {
+            layui.use('layer', function () {
+                layer.msg('请选择开始时间或结束时间！')
+            });
+            return null;
+        }
+        // debugger;
+        if (type == "" && channelId == "") { //1
+            $.ajax({
+                method: "post",
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                url: "/konsult/api/spend/selectSpendGrouByTimeSearch",
+                dataType: 'json',
+                data: {
+                    "beginTime": $("#beginTime").val(),
+                    "endTime": $("#endTime").val(),
+                    "typeId": $('#businessType1 option:selected').val(),
+                    "channelId": $("#channels option:selected").val()
+                },
+                success: function (data) {
+                    // debugger;
+                    var list = data.spendList;
+                    var maxtime = data.maxtime;
+                    var mintime = data.mintime;
+                    var sumadPv = data.sumadPv;
+                    var sumclick = data.sumclick;
+                    var sumcharge = data.sumcharge;
+                    var sumVisitor = data.sumVisitor;
+                    var sumPageviews = data.sumPageviews;
+                    var sumYue = data.sumYue;
+
+                    $("#listshow").empty();
+                    $(".informationL").empty();
+                    var html = ' <table class="layui-table" width="auto" style="white-space:nowrap" id="listshow">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>渠道</th>' +
+                        ' <th>展现数量</th>' +
+                        '<th>点击量</th>' +
+                        '<th>消费</th>' +
+                        // '<th>浏览量</th>' +
+                        // '<th>访客数</th>' +
+                        '<th>余额</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        ' <tbody class="information">' +
+                        '</tbody>' +
+                        '<thead class="informationL">' +
+                        '<tr>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '</table>'
+                    $("#listshow").append(html);
+                    if (list.length > 0) {
+                        for (var i = 0; i < list.length; i++) {
+                            result +=
+                                '<tr>' +
+                                '<td>' + list[i].channelId + '</td>' +
+                                '<td>' + list[i].adpv + '</td>' +
+                                '<td>' + list[i].click + '</td>' +
+                                '<td>' + list[i].charge + '</td>' +
+                                // '<td>' + list[i].pageviews + '</td>' +
+                                // '<td>' + list[i].visitor + '</td>' +
+                                '<td>' + returnFloat(list[i].yue) + '</td>' +
+                                '</tr>'
+                        }
+                        results +=
+                            '<tr>' +
+                            '<th>' + '合计' + '</th>' +
+                            '<th>' + sumadPv + '</th>' +
+                            '<th>' + sumclick + '</th>' +
+                            '<th>' + sumcharge + '</th>' +
+                            // '<th>' + sumPageviews + '</th>' +
+                            // '<th>' + sumVisitor + '</th>' +
+                            '<th>' + returnFloat(sumYue) + '</th>' +
+                            '</tr>';
+                        $(".informationL").html(results);
+                        $(".information").html(result);
+                    } else {
+                        $(".information").html("");
+
+                    }
+                }
+            });
+        } else if (type != "" && channelId == "") { //3
+            $.ajax({
+                method: "post",
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                url: "/konsult/api/spend/selectSpendGrouByTypeSearch",
+                dataType: 'json',
+                data: {
+                    "beginTime": $("#beginTime").val(),
+                    "endTime": $("#endTime").val(),
+                    "typeId": $('#businessType1 option:selected').val(),
+                    "channelId": $("#channels option:selected").val()
+                },
+                success: function (data) {
+                    var list = data.consultCountResponse;
+                    $("#listshow").empty();
+                    $(".informationL").empty();
+                    var html = ' <table class="layui-table" width="auto" style="white-space:nowrap" id="listshow">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>日期</th>' +
+                        ' <th>北京官网百度</th>' +
+                        ' <th>北京官网360</th>' +
+                        ' <th>青岛官网百度</th>' +
+                        ' <th>青岛官网360</th>' +
+                        ' <th>今日头条</th>' +
+                        ' <th>自营网店瓣装女装</th>' +
+                        ' <th>订购平台</th>' +
+                        ' <th>北京服务市场</th>' +
+                        ' <th>自营网店洪海青岛</th>' +
+                        ' <th>科大服务市场</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        ' <tbody class="information">' +
+                        '</tbody>' +
+                        '<thead class="informationL">' +
+                        '<tr>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '</table>'
+                    $("#listshow").append(html);
+                    for (var i = 0; i < list.length; i++) {
+                        result +=
+                            '<tr>' +
+                            '<td>' + list[i].date + '</td>' +
+                            '<td>' + list[i].beijingBd + '</td>' +
+                            '<td>' + list[i].beijing360 + '</td>' +
+                            '<td>' + list[i].qingdaoBd + '</td>' +
+                            '<td>' + list[i].qingdao360 + '</td>' +
+                            '<td>' + list[i].jinri + '</td>' +
+                            '<td>' + list[i].zyyz + '</td>' +
+                            '<td>' + list[i].dgpt + '</td>' +
+                            '<td>' + list[i].bjService1 + '</td>' +
+                            '<td>' + list[i].zywdqd + '</td>' +
+                            '<td>' + list[i].kdfwsc + '</td>' +
+                            '</tr>'
+                    }
+                    results +=
+                        '<tr>' +
+                        '<th>' + '合计' + '</th>' +
+                        '<th>' + data.sumadPv + '</th>' +
+                        '<th>' + data.sumclick + '</th>' +
+                        '<th>' + data.sumcharge + '</th>' +
+                        '<th>' + data.sumVisitor + '</th>' +
+                        '<th>' + data.sumPageviews1 + '</th>' +
+                        '<th>' + data.sumPageviews2 + '</th>' +
+                        '<th>' + data.sumPageviews3 + '</th>' +
+                        '<th>' + data.sumPageviews4 + '</th>' +
+                        '<th>' + data.sumPageviews5 + '</th>' +
+                        '<th>' + data.sumPageviews6 + '</th>' +
+                        '</tr>'
+                    $(".informationL").html(results);
+                    $(".information").html(result);
+                }
+            });
+        } else { //2
+            // debugger;
+            $.ajax({
+                method: "post",
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                url: "/konsult/api/spend/selectSpendGrouByChannelIdSearch",
+                dataType: 'json',
+                data: {
+                    "beginTime": $("#beginTime").val(),
+                    "endTime": $("#endTime").val(),
+                    "typeId": $('#businessType1 option:selected').val(),
+                    "channelId": $("#channels option:selected").val()
+                },
+                success: function (data) {
+                    var sumadPv = data.sumadPv;
+                    var sumclick = data.sumclick;
+                    var sumcharge = data.sumcharge;
+                    var sumVisitor = data.sumVisitor;
+                    var sumPageviews = data.sumPageviews;
+                    var sumYue = data.yue;
+                    var list = data.spendList;
+
+                    $("#listshow").empty();
+                    $(".informationL").empty();
+                    var html = ' <table class="layui-table" width="auto" style="white-space:nowrap" id="listshow">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>日期</th>' +
+                        ' <th>展现数量</th>' +
+                        '<th>点击量</th>' +
+                        '<th>消费</th>' +
+                        // '<th>浏览量</th>' +
+                        // '<th>访客数</th>' +
+                        '<th>余额</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        ' <tbody class="information">' +
+                        '</tbody>' +
+                        '<thead class="informationL">' +
+                        '<tr>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '</table>'
+                    $("#listshow").append(html);
+                    for (var i = 0; i < list.length; i++) {
+                        result +=
+                            '<tr>' +
+                            '<td>' + list[i].date.toString().split(" ")[0] + '</td>' +
+                            '<td>' + list[i].adpv + '</td>' +
+                            '<td>' + list[i].click + '</td>' +
+                            '<td>' + list[i].charge + '</td>' +
+                            // '<td>' + list[i].pageviews + '</td>' +
+                            // '<td>' + list[i].visitor + '</td>' +
+                            '<td>' + list[i].yue + '</td>' +
+                            '</tr>'
+                    }
+                    results +=
+                        '<tr>' +
+                        '<th>' + '合计' + '</th>' +
+                        '<th>' + sumadPv + '</th>' +
+                        '<th>' + sumclick + '</th>' +
+                        '<th>' + sumcharge + '</th>' +
+                        // '<th>' + sumPageviews + '</th>' +
+                        // '<th>' + sumVisitor + '</th>' +
+                        '<th>' + returnFloat(sumYue) + '</th>' +
+                        '</tr>'
+                    $(".informationL").html(results);
+                    $(".information").html(result);
+                }
+            });
+        }
+
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <script type="text/javascript" th:src="@{/js/area/data.js}"></script>
+    <script type="text/javascript" th:src="@{/js/area/province.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/my/permission.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/jq.js}"></script>
+    <script type="text/javascript">
+        var defaults = {
+            s1: 'provid',
+            s2: 'cityid',
+            v1: null,
+            v2: null,
+        };
+    </script>
+</head>
+
+<body>
+<div class="x-body">
+    <div class="layui-form-item layui-input-inline">
+        <label for="consultDate" class="layui-form-label">
+            <span class="x-red">*</span>咨询日期
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="consultDate" placeholder="yyyy-MM-dd">
+        </div>
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <label for="servicer" class="layui-form-label">
+            <span class="x-red">*</span>当前客服
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="servicer" required th:value="${username}">
+        </div>
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <label for="salesman" class="layui-form-label">
+            <span class="x-red"></span>业务员
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="salesman" required >
+        </div>
+    </div>
+    <br>
+    <div class="layui-form-item layui-input-inline">
+        <label for="name" class="layui-form-label">
+            <span class="x-red"></span>客户姓名
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="name" name="name" required lay-verify="required"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <label for="telephone" class="layui-form-label">
+            <span class="x-red"></span>客户电话
+        </label>
+        <div class="layui-input-inline ">
+            <input type="text" id="telephone" name="telephone" required lay-verify="required"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-input-inline">
+        <label for="businessType" class="layui-form-label">
+            <span class="x-red">*</span>业务类型
+        </label>
+        <div class="layui-input-inline">
+            <select class="form-control" name="business" id="businessType">
+                <option value="">请选择业务类型</option>
+                <option th:each="bT:${business}" th:value="${bT.id}" th:text="${bT.type }"></option>
+            </select>
+        </div>
+    </div>
+    <br>
+    <div class="layui-form-item layui-input-inline">
+        <label for="channel" class="layui-form-label">
+            <span class="x-red">*</span>咨询渠道
+        </label>
+        <div class="layui-input-inline" id="changeChannel">
+            <select class="form-control" name="channels" id="channel">
+                <option value="">请选择咨询渠道</option>
+                <option th:each="ch:${channels}" th:value="${ch.id}" th:text="${ch.channel }"></option>
+            </select>
+        </div>
+        <!--        <div class="layui-input-block layui-input-inline"style="margin-left: 10px;display:none" id="bai3" >-->
+        <!--            <input type="radio" name="bai3" th:each="cl:${childList}" th:value="${cl.id}" th:text="${cl.name }">&nbsp;&nbsp;-->
+        <!--        </div>-->
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <div class="layui-input-inline" id="changeChannels">
+            <select class="form-control" name="channels" id="channels">
+                <option value="0">请选择部门</option>
+                <option value="1">北京平台</option>
+                <option value="2">济南平台</option>
+                <option value="3">青岛平台</option>
+                <option value="4">合肥平台</option>
+            </select>
+        </div>
+        <!--        <div class="layui-input-block layui-input-inline"style="margin-left: 10px;display:none" id="bai3" >-->
+        <!--            <input type="radio" name="bai3" th:each="cl:${childList}" th:value="${cl.id}" th:text="${cl.name }">&nbsp;&nbsp;-->
+        <!--        </div>-->
+    </div>
+
+    <div class="layui-form-item layui-input-inline">
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>所在省市</label>
+                <div class="layui-input-inline">
+                    <select name="provid" id="provid" lay-filter="provid">
+                        <option value="">请选择省</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="cityid" id="cityid" lay-filter="cityid">
+                        <option value="">请选择市</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+    <div class="layui-form-item layui-input-inline">
+        <label for="wangwang" class="layui-form-label">
+            <span class="x-red"></span>商家旺旺id
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="wangwang" name="wangwang" required lay-verify="required"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <label for="storeName" class="layui-form-label">
+            <span class="x-red"></span>店铺名称
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="storeName" name="storeName" required lay-verify="required"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-input-inline">
+        <label for="storeUrl" class="layui-form-label">
+            <span class="x-red"></span>店铺链接
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="storeUrl" name="storeUrl" required lay-verify="required"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <br>
+    <div class="layui-form-item layui-input-inline">
+        <label for="remark" class="layui-form-label">
+            <span class="x-red"></span>产品类目
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="remark" name="remark" required lay-verify="required"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-input-inline">
+        <label for="level" class="layui-form-label">
+            <span class="x-red">*</span>客户等级
+        </label>
+        <div class="layui-input-inline">
+            <select class="form-control" name="level" id="level">
+                <!--                <option value="">请选择客户等级</option>-->
+                <option th:each="lv:${levels}" th:value="${lv.id}" th:text="${lv.level }"></option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <label for="weixin" class="layui-form-label">
+            <span class="x-red"></span>微信
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="weixin" name="weixin"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <br>
+    <div class="layui-form-item layui-input-inline">
+        <label for="QQ" class="layui-form-label">
+            <span class="x-red"></span>QQ
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" id="QQ" name="QQ"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <label class="layui-form-label">
+            <span class="x-red">*</span>是否电话
+        </label>
+        <div class="layui-input-inline">
+            <input type="radio" name="isTelephone" value="1" title="是"/>是 &nbsp;&nbsp;
+            <input type="radio" name="isTelephone" value="0" title="否" checked/>否
+        </div>
+    </div>
+    <div class="layui-form-item layui-input-inline">
+        <label class="layui-form-label">
+            <span class="x-red">*</span>是否二次
+        </label>
+        <div class="layui-input-inline">
+            <input type="radio" name="isTwice" value="1" title="是"/>是&nbsp;&nbsp;
+            <input type="radio" name="isTwice" value="0" title="否" checked/>否
+        </div>
+    </div>
+
+    <div class="layui-form-item ">
+        <label class="layui-form-label">
+            <span class="x-red"></span>产品类目备注
+        </label>
+        <div class="layui-input-inline">
+            <textarea rows="10" cols="40" id="textArea"></textarea>   <!-- cols="列数" rows="行数"-->
+
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+        </label>
+        <input type="button" class="layui-btn" style="margin-right: 20px" lay-filter="add" permission="sys : insert" onclick="f_submit();"
+               id="button" value="提交"/>
+    </div>
+</div>
+
+<script>
+    var pers = checkPermission();
+
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#consultDate' //指定元素
+            , value: new Date()
+            , isInitValue: true
+        });
+    });
+
+
+    function f_submit() {
+        var consultDate = $("#consultDate").val();
+        var servicer = $("#servicer").val();
+        if (null == servicer || servicer == undefined || servicer == '') {
+            return alert("当前客服不可为空");
+        }
+        // var salesman = $("#salesman").val();
+        // if (null == salesman || salesman == undefined || salesman == '') {
+        //     return alert("当前业务员不可为空");
+        // }
+        console.log($('#businessType option:selected').val());
+        if (null == $('#businessType option:selected').val() || $('#businessType option:selected').val() == undefined || $('#businessType option:selected').val() == '') {
+            return alert("业务类型还没有进行选择!");
+        }
+        console.log($("#channel option:selected").val());
+        if (null == $("#channel option:selected").val() || $("#channel option:selected").val() == undefined || $("#channel option:selected").val() == '') {
+            return alert("咨询渠道还没有进行选择!");
+        }
+       debugger;
+        var channels = $("#channels").find("option:selected").text();
+        if (channels == '请选择部门') {
+            $.ajax({
+
+                method: "POST",
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                url: "/konsult/consult/addData",
+                dataType: 'json',
+                data: {
+                    "consultDate": consultDate,
+                    "currentServicer": servicer,
+                    "name": $("#name").val(),
+                    "salesman": $("#salesman").val(),
+                    "telephone": $("#telephone").val(),
+                    "typeId": $('#businessType option:selected').val(),
+                    "channelId": $("#channel option:selected").val(),
+                    "typeName": $('#businessType option:selected').text(),
+                    "channelName": $("#channel option:selected").text(),
+                    // "channelChildId":$('input[name="bai3"]:checked').val(),
+                    "province": $("#provid option:selected").text(),
+                    "city": $("#cityid option:selected").text(),
+                    "provinceNum": $("#provid option:selected").val(),
+                    "cityNum": $("#cityid option:selected").val(),
+                    "wangwang": $("#wangwang").val(),
+                    "storeName": $("#storeName").val(),
+                    "storeUrl": $("#storeUrl").val(),
+                    "remark": $("#remark").val(),
+                    "levelId": $('#level option:selected').val(),
+                    "weixin": $("#weixin").val(),
+                    "qq": $("#QQ").val(),
+                    "isTelephone": $('input[name="isTelephone"]:checked').val(),
+                    "isTwice": $('input[name="isTwice"]:checked').val(),
+                    "remarkBeiZhu": $("#textArea").val(),
+                },
+                beforeSend: function (XMLHttpRequest) {
+                    layer.load(); //换了种风格
+                },
+                success: function (data) {
+                    var code = data.code;
+                    if(code == 2){
+                        alert(data.msg)
+                    }
+                    layer.closeAll('loading'); //关闭加载层
+                    alert(data.data);//弹出被分配的部门
+                    parent.location.href = '/konsult/consult/list'
+                }
+            });
+        }else{
+            $.ajax({
+
+                method: "POST",
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                url: "/konsult/consult/addData",
+                dataType: 'json',
+                data: {
+                    "consultDate": consultDate,
+                    "currentServicer": servicer,
+                    "name": $("#name").val(),
+                    "salesman":$("#salesman").val(),
+                    "telephone": $("#telephone").val(),
+                    "typeId": $('#businessType option:selected').val(),
+                    "channelId": $("#channel option:selected").val(),
+                    "typeName": $('#businessType option:selected').text(),
+                    "channelName": $("#channel option:selected").text(),
+                    // "channelChildId":$('input[name="bai3"]:checked').val(),
+                    "province": $("#provid option:selected").text(),
+                    "city": $("#cityid option:selected").text(),
+                    "provinceNum": $("#provid option:selected").val(),
+                    "cityNum": $("#cityid option:selected").val(),
+                    "wangwang": $("#wangwang").val(),
+                    "storeName": $("#storeName").val(),
+                    "storeUrl": $("#storeUrl").val(),
+                    "remark": $("#remark").val(),
+                    "levelId": $('#level option:selected').val(),
+                    "weixin": $("#weixin").val(),
+                    "qq": $("#QQ").val(),
+                    "isTelephone": $('input[name="isTelephone"]:checked').val(),
+                    "isTwice": $('input[name="isTwice"]:checked').val(),
+                    "remarkBeiZhu": $("#textArea").val(),
+                    "qudao" : channels,
+                },
+                beforeSend: function (XMLHttpRequest) {
+                    layer.load(); //换了种风格
+                },
+                success: function (data) {
+                    var code = data.code;
+                    if(code == 2){
+                        alert(data.msg)
+                    }
+                    layer.closeAll('loading'); //关闭加载层
+                    alert(data.data);//弹出被分配的部门
+                    parent.location.href = '/konsult/consult/list'
+                }
+            });
+        }
+
+
+    }
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+server:
+  port: 80
+  servlet:
+    context-path: /konsult
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://39.100.149.235:3306/consult?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    password: 123456
+#    url: jdbc:mysql://60.205.160.9:3306/consult?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+#    password: root
+    username: root
+    driverClassName:  com.mysql.cj.jdbc.Driver
+    initialSize: 1
+    minIdle: 1
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    validationQuery: SELECT 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: false
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall,slf4j
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    thymeleaf:
+      suffix: .html
+      mode: HTML5
+      encoding: UTF-8
+      content-type: text/html
+      cache: false
+    servlet:
+      multipart:
+        max-file-size: 100Mb
+        max-request-size: 100Mb
+  mvc:
+    servlet:
+      load-on-startup: 1
+  thymeleaf:
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 10MB
+  devtools:
+    restart:
+      enabled: true
+
+# 打印sql
+logging:
+  level:
+    com.hhlt.konsultado.mapper: debug
+  config: classpath:logback-spring.xml
+
+mybatis:
+  type-aliases-package: com.hhlt.konsultado.entity
+  mapper-locations: mapper/**Mapper.xml
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+exportFile: E:\\konsult\\
+exportFileLinux: /hhlt/data/export
+linuxFile: /hhlt/file
+linuxImportFile: /hhlt/data/import
+
+token:
+  expire:
+    seconds: 7200
+  jwtSecret: (XIAO:)_$^11244^%$_(WEI:)_@@++--(LAO:)_++++_.sds_(SHI:)

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <link rel="shortcut icon" th:href="@{/layui/css/layui.css}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}" type="text/css">
+    <script type="text/javascript" th:src="@{/layuis/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/my/permission.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/jq.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">转化率</a>
+      </span>
+    <a class="layui-btn layui-btn-primary layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:38px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <div class="layui-form layui-col-md12 x-so">
+            <input type="text" class="layui-input" id="test3" placeholder="选择月份">
+            <button class="layui-btn" id="add" onclick="save();" permission="sys : insert">录入</button>
+        </div>
+    </div>
+    <form class="layui-form">
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+    </form>
+</div>
+<script>
+    var pers = checkPermission();
+
+    $(document).ready(function () {
+        //select();
+    });
+
+    layui.use(['form','table','laydate'], function(){
+
+        var laydate = layui.laydate;
+        var table = layui.table;
+        var str = [
+            {platformId:"1",platformName:'北京平台',operate1:'',operate3:'',operate4:'',operate5:'',operate6:'',operate7:'',operate2:''},
+            {platformId:"2",platformName:'济南平台',operate1:'',operate3:'',operate4:'',operate5:'',operate6:'',operate7:'',operate2:''},
+            {platformId:"3",platformName:'青岛平台',operate1:'',operate3:'',operate4:'',operate5:'',operate6:'',operate7:'',operate2:''},
+            {platformId:"4",platformName:'合肥平台',operate1:'',operate3:'',operate4:'',operate5:'',operate6:'',operate7:'',operate2:''},
+            {platformId:"5",platformName:'固定分配比例',operate1:'',operate3:'',operate4:'',operate5:'',operate6:'',operate7:'',operate2:''}
+        ];
+
+        laydate.render({
+            elem: '#test3'
+            ,type: 'month'
+            ,done:function (value,date) {
+                $.ajax({
+                    method: "get",
+                    headers: {
+                        "contentType": "application/json;charset=UTF-8"
+                    },
+                    url: "/konsult/api/rate/selectPlat?data="+value,
+                    dataType: 'json',
+                    success: function (data) {
+                        var fixed = data.data.fixed;
+                        var result = data.data.list;
+                        if(result.length == 0 || null == fixed){
+                            for(var i=0;i<str.length;i++){
+                                str[i].operate1 = '';
+                                str[i].operate3 = '';
+                                str[i].operate4 = '';
+                                str[i].operate5 = '';
+                                str[i].operate6 = '';
+                                str[i].operate7 = '';
+                                str[i].operate2 = '';
+                            }
+                        }else{
+                            str[4].operate1 = fixed.operate1;
+                            str[4].operate3 = fixed.operate3;
+                            str[4].operate4 = fixed.operate4;
+                            str[4].operate5 = fixed.operate5;
+                            str[4].operate6 = fixed.operate6;
+                            str[4].operate7 = fixed.operate7;
+                            str[4].operate2 = fixed.operate2;
+                            for(var i=0;i<result.length;i++){
+                                if(result[i].platformId == str[0].platformId){
+                                    str[0].operate1 = result[i].operate1;
+                                    str[0].operate3 = result[i].operate3;
+                                    str[0].operate4 = result[i].operate4;
+                                    str[0].operate5 = result[i].operate5;
+                                    str[0].operate6 = result[i].operate6;
+                                    str[0].operate7 = result[i].operate7;
+                                    str[0].operate2 = result[i].operate2;
+                                }
+                                if(result[i].platformId == str[1].platformId){
+                                    str[1].operate1 = result[i].operate1;
+                                    str[1].operate3 = result[i].operate3;
+                                    str[1].operate4 = result[i].operate4;
+                                    str[1].operate5 = result[i].operate5;
+                                    str[1].operate6 = result[i].operate6;
+                                    str[1].operate7 = result[i].operate7;
+                                    str[1].operate2 = result[i].operate2;
+                                }
+                                if(result[i].platformId == str[2].platformId){
+                                    str[2].operate1 = result[i].operate1;
+                                    str[2].operate3 = result[i].operate3;
+                                    str[2].operate4 = result[i].operate4;
+                                    str[2].operate5 = result[i].operate5;
+                                    str[2].operate6 = result[i].operate6;
+                                    str[2].operate7 = result[i].operate7;
+                                    str[2].operate2 = result[i].operate2;
+                                }
+                                if(result[i].platformId == str[3].platformId){
+                                    str[3].operate1 = result[i].operate1;
+                                    str[3].operate3 = result[i].operate3;
+                                    str[3].operate4 = result[i].operate4;
+                                    str[3].operate5 = result[i].operate5;
+                                    str[3].operate6 = result[i].operate6;
+                                    str[3].operate7 = result[i].operate7;
+                                    str[3].operate2 = result[i].operate2;
+                                }
+                            }
+                        }
+                        table.reload("test",{
+                            data: str
+                        })
+                    }
+                })
+            }
+        });
+        var date=new Date();
+        $("#test3").val(date.getFullYear()+"-"+(date.getMonth()+1));
+        table.render({
+            elem: '#test'
+            ,data:str
+            ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            ,cols: [
+                    [
+                         {field:'platformId', width:80, title: 'ID', sort: true}
+                        ,{field:'platformName', width:150, title: ''}
+                        ,{field:'operate1', width:150, title: '代运营转化率',edit: 'text'}
+                        ,{field:'operate3', width:150, title: '直通车',edit: 'text'}
+                        ,{field:'operate4', width:150, title: '钻展',edit: 'text'}
+                        ,{field:'operate5', width:150, title: '超级推荐',edit: 'text'}
+                        ,{field:'operate6', width:150, title: '内容',edit: 'text'}
+                        ,{field:'operate7', width:150, title: '装修',edit: 'text'}
+                        ,{field:'operate2', width:150, title: '其余转化率',edit: 'text'}
+                    ]
+                  ],
+
+        });
+
+        //监听单元格编辑
+        table.on('edit(test)', function(obj){
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+
+            //layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+        });
+        $("#add").click(function () {
+            var dataRemoves = table.cache['test'];
+            save(dataRemoves);
+        });
+    });
+    function save(data) {
+        var str = JSON.stringify(data);
+        var json = JSON.parse(str);
+        if(undefined == $("#test3").val() || $("#test3").val() == ''){
+            layer.msg('请选择月份');
+            return;
+        }
+        for(var i =0;i<json.length;i++){
+            if(undefined == json[i].operate1  || json[i].operate1 === ''){
+                layer.msg('代运营转化率为空');
+                return;
+            }
+            if(undefined == json[i].operate3  || json[i].operate3 === ''){
+                layer.msg('直通车转化率为空');
+                return;
+            }
+            if(undefined == json[i].operate4  || json[i].operate4 === ''){
+                layer.msg('钻展转化率为空');
+                return;
+            }
+            if(undefined == json[i].operate5  || json[i].operate5 === ''){
+                layer.msg('超级推荐转化率为空');
+                return;
+            }
+            if(undefined == json[i].operate6  || json[i].operate6 === ''){
+                layer.msg('内容转化率为空');
+                return;
+            }
+            if(undefined == json[i].operate7  || json[i].operate7 === ''){
+                layer.msg('装修转化率为空');
+                return;
+            }
+            if(undefined == json[i].operate2  || json[i].operate2 === ''){
+                layer.msg('其余转化率为空');
+                return;
+            }
+        }
+        var loading = layer.msg('正在提交', {icon: 16, shade: 0.3, time:0});
+        for(var i =0;i<json.length;i++){
+            if(json[i].platformId == 5){
+                $.ajax({
+                    method: "post",
+                    headers: {
+                        "contentType": "application/json;charset=UTF-8"
+                    },
+                    url: "/konsult/api/rate/savePlat",
+                    dataType: 'json',
+                    data: {
+                        "platformId": json[i].platformId,
+                        "operate1": json[i].operate1,
+                        "operate3": json[i].operate3,
+                        "operate4": json[i].operate4,
+                        "operate5": json[i].operate5,
+                        "operate6": json[i].operate6,
+                        "operate7": json[i].operate7,
+                        "operate2": json[i].operate2,
+                        "date":$("#test3").val()
+                    },
+                    success: function (data) {
+
+                        insert(json,data);
+                    }
+                })
+            }
+        }
+        layer.close(loading);
+    }
+
+    function insert(json,data) {
+        for(var i =0;i<json.length;i++){
+            if(json[i].platformId != 5){
+                $.ajax({
+                    method: "post",
+                    headers: {
+                        "contentType": "application/json;charset=UTF-8"
+                    },
+                    url: "/konsult/api/rate/savePlat",
+                    dataType: 'json',
+                    data: {
+                        "fixedId": data.data,
+                        "platformId": json[i].platformId,
+                        "operate1": json[i].operate1,
+                        "operate3": json[i].operate3,
+                        "operate4": json[i].operate4,
+                        "operate5": json[i].operate5,
+                        "operate6": json[i].operate6,
+                        "operate7": json[i].operate7,
+                        "operate2": json[i].operate2,
+                        "date":$("#test3").val()
+                    },
+                    success: function (data) {
+
+                    }
+                })
+            }
+        }
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.SysPermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.SysPermission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="parentId" property="parentid" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="css" property="css" jdbcType="VARCHAR" />
+    <result column="href" property="href" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="permission" property="permission" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, parentId, name, css, href, type, permission, sort
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_permission
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hhlt.konsultado.entity.SysPermission" >
+    insert into sys_permission (id, parentId, name, 
+      css, href, type, permission, 
+      sort)
+    values (#{id,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{css,jdbcType=VARCHAR}, #{href,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{permission,jdbcType=VARCHAR},
+      #{sort,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.SysPermission" >
+    insert into sys_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="parentid != null" >
+        parentId,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="css != null" >
+        css,
+      </if>
+      <if test="href != null" >
+        href,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="permission != null" >
+        permission,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="css != null" >
+        #{css,jdbcType=VARCHAR},
+      </if>
+      <if test="href != null" >
+        #{href,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="permission != null" >
+        #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhlt.konsultado.entity.SysPermission" >
+    update sys_permission
+    <set >
+      <if test="parentid != null" >
+        parentId = #{parentid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="css != null" >
+        css = #{css,jdbcType=VARCHAR},
+      </if>
+      <if test="href != null" >
+        href = #{href,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="permission != null" >
+        permission = #{permission,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hhlt.konsultado.entity.SysPermission" >
+    update sys_permission
+    set parentId = #{parentid,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      css = #{css,jdbcType=VARCHAR},
+      href = #{href,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      permission = #{permission,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="listByUserId" resultType="com.hhlt.konsultado.entity.SysPermission">
+    select distinct p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId
+        inner join sys_role_user ru on ru.roleId = rp.roleId
+    where ru.userId = #{userId} order by p.sort
+  </select>
+
+  <delete id="deleteRolePermission" parameterType="java.lang.Long">
+    delete from sys_role_permission where permissionId = #{permissionId}
+  </delete>
+  <delete id="deleteByParentId" parameterType="java.lang.Long">
+    delete from sys_permission where parentId = #{id}
+  </delete>
+
+
+  <select id="listAll" resultType="com.hhlt.konsultado.entity.SysPermission">
+    select * from sys_permission t order by t.sort
+  </select>
+  <select id="listParents" resultType="com.hhlt.konsultado.entity.SysPermission">
+    select * from sys_permission t where t.type = 1 order by t.sort
+  </select>
+  <select id="listByRoleId" resultType="com.hhlt.konsultado.entity.SysPermission">
+    select p.* from sys_permission p inner join sys_role_permission rp on p.id = rp.permissionId where rp.roleId = #{roleId} order by p.sort
+  </select>
+</mapper>

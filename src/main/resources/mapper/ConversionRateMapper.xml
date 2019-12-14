@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.ConversionRateMapper" >
+  <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.ConversionRate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="platform_id" property="platformId" jdbcType="INTEGER" />
+    <result column="operate1" property="operate1" jdbcType="DOUBLE" />
+    <result column="operate2" property="operate2" jdbcType="DOUBLE" />
+    <result column="operate3" property="operate3" jdbcType="DOUBLE" />
+    <result column="operate4" property="operate4" jdbcType="DOUBLE" />
+    <result column="operate5" property="operate5" jdbcType="DOUBLE" />
+    <result column="operate6" property="operate6" jdbcType="DOUBLE" />
+    <result column="operate7" property="operate7" jdbcType="DOUBLE" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="fixed_id" property="fixedId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, platform_id, operate1, operate2, date, status, create_time, update_time,fixed_id,operate3,operate4,operate5,operate6,operate7
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from conversion_rate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from conversion_rate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hhlt.konsultado.entity.ConversionRate" >
+    insert into conversion_rate (id, platform_id, operate1, 
+      operate2, date, status, create_time, 
+      update_time,fixed_id)
+    values (#{id,jdbcType=INTEGER}, #{platformId,jdbcType=INTEGER}, #{operate1,jdbcType=DOUBLE}, 
+      #{operate2,jdbcType=DOUBLE}, #{date,jdbcType=DATE}, #{status,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP},#{fixedId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.ConversionRate" >
+    insert into conversion_rate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="platformId != null" >
+        platform_id,
+      </if>
+      <if test="operate1 != null" >
+        operate1,
+      </if>
+      <if test="operate2 != null" >
+        operate2,
+      </if>
+      <if test="operate3 != null" >
+        operate3,
+      </if>
+      <if test="operate4 != null" >
+        operate4,
+      </if>
+      <if test="operate5 != null" >
+        operate5,
+      </if>
+      <if test="operate6 != null" >
+        operate6,
+      </if>
+      <if test="operate7 != null" >
+        operate7,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="fixedId != null">
+        fixed_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="platformId != null" >
+        #{platformId,jdbcType=INTEGER},
+      </if>
+      <if test="operate1 != null" >
+        #{operate1,jdbcType=DOUBLE},
+      </if>
+      <if test="operate2 != null" >
+        #{operate2,jdbcType=DOUBLE},
+      </if>
+      <if test="operate3 != null" >
+        #{operate3,jdbcType=DOUBLE},
+      </if>
+      <if test="operate4 != null" >
+        #{operate4,jdbcType=DOUBLE},
+      </if>
+      <if test="operate5 != null" >
+        #{operate5,jdbcType=DOUBLE},
+      </if>
+      <if test="operate6 != null" >
+        #{operate6,jdbcType=DOUBLE},
+      </if>
+      <if test="operate7 != null" >
+        #{operate7,jdbcType=DOUBLE},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fixedId != null" >
+        #{fixedId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhlt.konsultado.entity.ConversionRate" >
+    update conversion_rate
+    <set >
+      <if test="platformId != null" >
+        platform_id = #{platformId,jdbcType=INTEGER},
+      </if>
+      <if test="operate1 != null" >
+        operate1 = #{operate1,jdbcType=DOUBLE},
+      </if>
+      <if test="operate2 != null" >
+        operate2 = #{operate2,jdbcType=DOUBLE},
+      </if>
+      <if test="operate3 != null" >
+        operate3 = #{operate3,jdbcType=DOUBLE},
+      </if>
+      <if test="operate4 != null" >
+        operate4 = #{operate4,jdbcType=DOUBLE},
+      </if>
+      <if test="operate5 != null" >
+        operate5 = #{operate5,jdbcType=DOUBLE},
+      </if>
+      <if test="operate6 != null" >
+        operate6 = #{operate6,jdbcType=DOUBLE},
+      </if>
+      <if test="operate7 != null" >
+        operate7 = #{operate7,jdbcType=DOUBLE},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fixedId != null">
+        fixed_id = #{fixedId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hhlt.konsultado.entity.ConversionRate" >
+    update conversion_rate
+    set platform_id = #{platformId,jdbcType=INTEGER},
+      operate1 = #{operate1,jdbcType=DOUBLE},
+      operate2 = #{operate2,jdbcType=DOUBLE},
+      date = #{date,jdbcType=DATE},
+      status = #{status,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      fixed_id = #{fixedId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectConversionRate" resultType="com.hhlt.konsultado.entity.ConversionRate" parameterType="string">
+    select * from conversion_rate where DATE_FORMAT( date, '%Y%m' ) = DATE_FORMAT( #{createTime} , '%Y%m' ) and platform_id in(1,2,3,4)
+  </select>
+
+  <select id="avgRate" resultType="java.lang.Double">
+    select avg(operate1) from conversion_rate where date_format(date,'%Y-%m') like #{consultDate}
+  </select>
+
+  <select id="platMap" resultType="com.hhlt.konsultado.response.PlatformRate">
+    select c.platform_id as platId, p.platform_name as platformName ,c.operate1 as rate  from conversion_rate c
+        left join platform_information p on c.platform_id = p.id where  date_format(date,'%Y-%m') like #{consultDate}
+        order by c.operate1 desc
+  </select>
+</mapper>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.DealDataMapper">
+    <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.DealData">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="order_id" property="orderId" jdbcType="VARCHAR"/>
+        <result column="sign_date" property="signDate" jdbcType="DATE"/>
+        <result column="sale_team" property="saleTeam" jdbcType="VARCHAR"/>
+        <result column="sale_deputy" property="saleDeputy" jdbcType="VARCHAR"/>
+        <result column="deal_project" property="dealProject" jdbcType="VARCHAR"/>
+        <result column="contact" property="contact" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="deal_money" property="dealMoney" jdbcType="DECIMAL"/>
+        <result column="payment_cycle" property="paymentCycle" jdbcType="INTEGER"/>
+        <result column="store_category" property="storeCategory" jdbcType="VARCHAR"/>
+        <result column="store_level" property="storeLevel" jdbcType="VARCHAR"/>
+        <result column="channel" property="channel" jdbcType="VARCHAR"/>
+        <result column="wangwang_id" property="wangwangId" jdbcType="VARCHAR"/>
+        <result column="store_url" property="storeUrl" jdbcType="VARCHAR"/>
+        <result column="beizhu" property="beizhu" jdbcType="VARCHAR"/>
+        <result column="arrival_status" property="arrivalStatus" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, order_id, sign_date, sale_team, sale_deputy, deal_project, contact, province,
+    city, telephone, deal_money, payment_cycle, store_category, store_level, channel, 
+    wangwang_id, store_url, beizhu, arrival_status, type
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from deal_data
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from deal_data
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.hhlt.konsultado.entity.DealData">
+        insert into deal_data (id, order_id, sign_date,
+                               sale_team, sale_deputy, deal_project,
+                               contact, province, city,
+                               telephone, deal_money, payment_cycle,
+                               store_category, store_level, channel,
+                               wangwang_id, store_url, beizhu,
+                               arrival_status, type)
+        values (#{id,jdbcType=INTEGER}, #{orderId,jdbcType=VARCHAR}, #{signDate,jdbcType=DATE},
+                #{saleTeam,jdbcType=VARCHAR}, #{saleDeputy,jdbcType=VARCHAR}, #{dealProject,jdbcType=VARCHAR},
+                #{contact,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR},
+                #{telephone,jdbcType=VARCHAR}, #{dealMoney,jdbcType=DECIMAL}, #{paymentCycle,jdbcType=INTEGER},
+                #{storeCategory,jdbcType=VARCHAR}, #{storeLevel,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR},
+                #{wangwangId,jdbcType=VARCHAR}, #{storeUrl,jdbcType=VARCHAR}, #{beizhu,jdbcType=VARCHAR},
+                #{arrivalStatus,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.DealData">
+        insert into deal_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="signDate != null">
+                sign_date,
+            </if>
+            <if test="saleTeam != null">
+                sale_team,
+            </if>
+            <if test="saleDeputy != null">
+                sale_deputy,
+            </if>
+            <if test="dealProject != null">
+                deal_project,
+            </if>
+            <if test="contact != null">
+                contact,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="dealMoney != null">
+                deal_money,
+            </if>
+            <if test="paymentCycle != null">
+                payment_cycle,
+            </if>
+            <if test="storeCategory != null">
+                store_category,
+            </if>
+            <if test="storeLevel != null">
+                store_level,
+            </if>
+            <if test="channel != null">
+                channel,
+            </if>
+            <if test="wangwangId != null">
+                wangwang_id,
+            </if>
+            <if test="storeUrl != null">
+                store_url,
+            </if>
+            <if test="beizhu != null">
+                beizhu,
+            </if>
+            <if test="arrivalStatus != null">
+                arrival_status,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="signDate != null">
+                #{signDate,jdbcType=DATE},
+            </if>
+            <if test="saleTeam != null">
+                #{saleTeam,jdbcType=VARCHAR},
+            </if>
+            <if test="saleDeputy != null">
+                #{saleDeputy,jdbcType=VARCHAR},
+            </if>
+            <if test="dealProject != null">
+                #{dealProject,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="dealMoney != null">
+                #{dealMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="paymentCycle != null">
+                #{paymentCycle,jdbcType=INTEGER},
+            </if>
+            <if test="storeCategory != null">
+                #{storeCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="storeLevel != null">
+                #{storeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="channel != null">
+                #{channel,jdbcType=VARCHAR},
+            </if>
+            <if test="wangwangId != null">
+                #{wangwangId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeUrl != null">
+                #{storeUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="beizhu != null">
+                #{beizhu,jdbcType=VARCHAR},
+            </if>
+            <if test="arrivalStatus != null">
+                #{arrivalStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hhlt.konsultado.entity.DealData">
+        update deal_data
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="signDate != null">
+                sign_date = #{signDate,jdbcType=DATE},
+            </if>
+            <if test="saleTeam != null">
+                sale_team = #{saleTeam,jdbcType=VARCHAR},
+            </if>
+            <if test="saleDeputy != null">
+                sale_deputy = #{saleDeputy,jdbcType=VARCHAR},
+            </if>
+            <if test="dealProject != null">
+                deal_project = #{dealProject,jdbcType=VARCHAR},
+            </if>
+            <if test="contact != null">
+                contact = #{contact,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="dealMoney != null">
+                deal_money = #{dealMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="paymentCycle != null">
+                payment_cycle = #{paymentCycle,jdbcType=INTEGER},
+            </if>
+            <if test="storeCategory != null">
+                store_category = #{storeCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="storeLevel != null">
+                store_level = #{storeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="channel != null">
+                channel = #{channel,jdbcType=VARCHAR},
+            </if>
+            <if test="wangwangId != null">
+                wangwang_id = #{wangwangId,jdbcType=VARCHAR},
+            </if>
+            <if test="storeUrl != null">
+                store_url = #{storeUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="beizhu != null">
+                beizhu = #{beizhu,jdbcType=VARCHAR},
+            </if>
+            <if test="arrivalStatus != null">
+                arrival_status = #{arrivalStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.hhlt.konsultado.entity.DealData">
+        update deal_data
+        set order_id       = #{orderId,jdbcType=VARCHAR},
+            sign_date      = #{signDate,jdbcType=DATE},
+            sale_team      = #{saleTeam,jdbcType=VARCHAR},
+            sale_deputy    = #{saleDeputy,jdbcType=VARCHAR},
+            deal_project   = #{dealProject,jdbcType=VARCHAR},
+            contact        = #{contact,jdbcType=VARCHAR},
+            province       = #{province,jdbcType=VARCHAR},
+            city           = #{city,jdbcType=VARCHAR},
+            telephone      = #{telephone,jdbcType=VARCHAR},
+            deal_money     = #{dealMoney,jdbcType=DECIMAL},
+            payment_cycle  = #{paymentCycle,jdbcType=INTEGER},
+            store_category = #{storeCategory,jdbcType=VARCHAR},
+            store_level    = #{storeLevel,jdbcType=VARCHAR},
+            channel        = #{channel,jdbcType=VARCHAR},
+            wangwang_id    = #{wangwangId,jdbcType=VARCHAR},
+            store_url      = #{storeUrl,jdbcType=VARCHAR},
+            beizhu         = #{beizhu,jdbcType=VARCHAR},
+            arrival_status = #{arrivalStatus,jdbcType=VARCHAR},
+            type           = #{type,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="list" resultType="com.hhlt.konsultado.entity.DealData">
+        select * from deal_data where 1=1
+        <if test="beginTime != null and beginTime != ''">
+            and sign_date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and sign_date &lt;= #{endTime}
+        </if>
+        <if test="saleDeputy != null and saleDeputy != ''">
+            and sale_deputy like concat(concat("%",#{saleDeputy}),"%")
+        </if>
+        <if test="saleTeam != null and saleTeam != ''">
+            and sale_team = #{saleTeam}
+        </if>
+        order by sign_date desc limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from deal_data where 1=1
+        <if test="beginTime != null and beginTime != ''">
+            and sign_date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and sign_date &lt;= #{endTime}
+        </if>
+        <if test="saleDeputy != null and saleDeputy != ''">
+            and sale_deputy like concat(concat("%",#{saleDeputy}),"%")
+        </if>
+        <if test="saleTeam != null and saleTeam != ''">
+            and sale_team = #{saleTeam}
+        </if>
+    </select>
+</mapper>

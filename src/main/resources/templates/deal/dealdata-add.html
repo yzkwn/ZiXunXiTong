@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!--<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />-->
+
+    <link rel="stylesheet" th:href="@{/css/font.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/my/permission.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/jq.js}"></script>
+
+</head>
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">成交数据</a>
+        <a>
+          <cite>数据录入</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-primary layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:38px">ဂ</i></a>
+</div>
+<form id="menuUploadForm" class="layui-form" style="margin-top: 20px;margin-right: 20px" enctype="multipart/form-data">
+    <div class="x-body">
+
+        <div class="layui-upload">
+            <button type="button" class="layui-btn layui-btn-normal"
+                    id="testList" permission="batch:file">选择文件
+            </button>
+            <div class="layui-upload-list">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>状态</th>
+                        <th>路径</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="demoList"></tbody>
+                </table>
+            </div>
+            <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        <div id="uploadLoadingDiv">
+            <div class="layui-progress" lay-showpercent="true" lay-filter="demo">
+                <div class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>
+            </div>
+        </div>
+
+
+    </div>
+</form>
+
+<script>
+    var files = [];
+    layui.use(['upload', 'element', 'layer'], function () {
+        var upload = layui.upload, element = layui.element, layer = layui.layer;
+        var timer;//定义一个计时器
+
+        //多文件列表示例
+        var demoListView = $('#demoList')
+            , uploadListIns = upload.render({
+            elem: '#testList'    //指向容器选择器,也可以是DOM对象
+            , url: '/konsult/deal/uploads'
+            , size: 0 //限制文件大小，单位 KB
+            , accept: 'file'
+            , exts: 'doc|docx|pdf|xls|xlsx|ppt|pptx' //只允许上传文本文件
+            // ,data:{'ID':277}   //可放扩展数据  key-value
+            , multiple: true
+            , auto: false
+            , bindAction: '#testListAction'  //指向一个按钮触发上传，一般配合 auto: false 来使用。值为选择器或DOM对象，
+
+            , before: function (obj) {
+                layer.load(); //上传loading
+                var n = 0;
+                timer = setInterval(function () {//按照时间随机生成一个小于95的进度，具体数值可以自己调整
+                    n = n + Math.random() * 10 | 0;
+                    if (n > 95) {
+                        n = 95;
+                        clearInterval(timer);
+                    }
+                    element.progress('demo', n + '%');
+                }, 50 + Math.random() * 100);
+            }
+            , choose: function (obj) {
+                var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                //遍历文件队列
+                var curFileList = []; //当前文件队列
+                $('#demoList tr').each(function () {
+                    var fileName = $(this).children().eq(0).text();
+                    var fileSize = $(this).children().eq(1).text();
+                    curFileList.push({name: fileName, size: fileSize});
+                });
+
+                //读取本地文件
+                obj.preview(function (index, file, result) {
+                    //过滤相同文件名的文件
+                    for (var i = 0; i < curFileList.length; i++) {
+                        if (file.name == curFileList[i].name) {
+                            delete files[index];//删除对应文件
+                            layer.msg('文件名有重复！！', {icon: 3});
+                            return;
+                        }
+                    }
+                    var tr = $(['<tr id="upload-' + index + '">'
+                        , '<td>' + file.name + '</td>'
+                        , '<td>' + (file.size / 1014).toFixed(1) + 'kb</td>'
+                        , '<td>等待上传</td>'
+                        , '<td></td>'
+                        , '<td>'
+                        , '<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                        , '<button class="layui-btn layui-btn-mini layui-btn-danger demo-delete">删除</button>'
+                        , '</td>'
+                        , '</tr>'].join(''));
+
+                    //单个重传
+                    tr.find('.demo-reload').on('click', function () {
+                        obj.upload(index, file);
+                    });
+                    //删除
+                    tr.find('.demo-delete').on('click', function () {
+                        delete files[index]; //删除对应的文件
+                        tr.remove();
+                        uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                    });
+                    demoListView.append(tr);
+                });
+            }
+            , done: function (res, index, upload) {
+                clearInterval(timer);
+                element.progress('demo', '100%');//一成功就把进度条置为100%
+                layer.closeAll();
+
+                if (res.code == 0) { //上传成功
+                    files.push({"fileName": res.fileName, "fileUrl": res.fileUrl, "fileSize": res.fileSize});
+                    var json = JSON.stringify(files);
+                    //将上传的文件信息加入到集合中并转换成json字符串
+                    $("#fileJson").attr("value", json);
+
+                    var fileUrl = res.fileUrl;
+                    var tr = demoListView.find('tr#upload-' + index)
+                        , tds = tr.children();
+                    tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                    tds.eq(3).html('<span>' + fileUrl + '</span>');
+                    tds.eq(4).html(''); //清空操作
+                    return delete this.files[index]; //删除文件队列已经上传成功的文件
+                } else {
+                    this.error(res, index, upload);
+                }
+            }
+            , error: function (res, index, upload) {
+                //关闭所有层layer.msg('上传更新包失败');
+                element.progress('demo', '0%');
+                layer.closeAll();
+                var tr = demoListView.find('tr#upload-' + index)
+                    , tds = tr.children();
+                tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                tds.eq(4).find('.demo-reload').removeClass('layui-hide');
+                layer.alert(res.msg);
+            }
+        });
+        $(".layui-upload-file").hide();
+    });
+</script>
+
+</body>
+
+</html>

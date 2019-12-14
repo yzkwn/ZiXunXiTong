@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.ConsultDataMapper">
+    <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.ConsultData">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="consult_date" property="consultDate" jdbcType="DATE"/>
+        <result column="type_id" property="typeId" jdbcType="INTEGER"/>
+        <result column="channel_id" property="channelId" jdbcType="INTEGER"/>
+        <result column="telephone" property="telephone" jdbcType="VARCHAR"/>
+        <result column="province" property="province" jdbcType="VARCHAR"/>
+        <result column="province_num" property="provinceNum" jdbcType="VARCHAR"/>
+        <result column="city" property="city" jdbcType="VARCHAR"/>
+        <result column="city_num" property="cityNum" jdbcType="VARCHAR"/>
+        <result column="wangwang" property="wangwang" jdbcType="VARCHAR"/>
+        <result column="store_name" property="storeName" jdbcType="VARCHAR"/>
+        <result column="store_url" property="storeUrl" jdbcType="VARCHAR"/>
+        <result column="weixin" property="weixin" jdbcType="VARCHAR"/>
+        <result column="qq" property="qq" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="remark_beizhu" property="remarkBeiZhu" jdbcType="VARCHAR"/>
+        <result column="level_id" property="levelId" jdbcType="INTEGER"/>
+        <result column="is_telephone" property="isTelephone" jdbcType="BIT"/>
+        <result column="is_twice" property="isTwice" jdbcType="BIT"/>
+        <result column="current_servicer" property="currentServicer" jdbcType="VARCHAR"/>
+        <result column="planform_id" property="planformId" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="salesman" property="salesman" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,name, consult_date, type_id, channel_id, telephone, province, city, wangwang, store_name,
+    store_url, weixin, qq, remark, remark_beizhu,level_id, is_telephone, is_twice, current_servicer,
+    planform_id, status, create_time, update_time,province_num,city_num,salesman
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from consult_data
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from consult_data
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.hhlt.konsultado.entity.ConsultData">
+        insert into consult_data (id, name, consult_date, type_id,
+                                  channel_id, telephone, province,
+                                  city, wangwang, store_name,
+                                  store_url, weixin, qq,
+                                  remark, level_id, is_telephone,
+                                  is_twice, current_servicer, planform_id,
+                                  status, create_time, update_time, remark_beizhu, province_num, city_num, salesman)
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{consultDate,jdbcType=TIMESTAMP},
+                #{typeId,jdbcType=INTEGER},
+                #{channelId,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR},
+                #{city,jdbcType=VARCHAR}, #{wangwang,jdbcType=VARCHAR}, #{storeName,jdbcType=VARCHAR},
+                #{storeUrl,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR},
+                #{remark,jdbcType=VARCHAR}, #{levelId,jdbcType=INTEGER}, #{isTelephone,jdbcType=BIT},
+                #{isTwice,jdbcType=BIT}, #{currentServicer,jdbcType=VARCHAR}, #{planformId,jdbcType=INTEGER},
+                #{status,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+                #{remarkBeiZhu,jdbcType=VARCHAR},
+                #{provinceNum,jdbcType=VARCHAR}, #{cityNum,jdbcType=VARCHAR}, #{salesman,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.ConsultData">
+        insert into consult_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="consultDate != null">
+                consult_date,
+            </if>
+            <if test="typeId != null">
+                type_id,
+            </if>
+            <if test="channelId != null">
+                channel_id,
+            </if>
+            <if test="telephone != null">
+                telephone,
+            </if>
+            <if test="province != null">
+                province,
+            </if>
+            <if test="city != null">
+                city,
+            </if>
+            <if test="wangwang != null">
+                wangwang,
+            </if>
+            <if test="storeName != null">
+                store_name,
+            </if>
+            <if test="storeUrl != null">
+                store_url,
+            </if>
+            <if test="weixin != null">
+                weixin,
+            </if>
+            <if test="qq != null">
+                qq,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="levelId != null">
+                level_id,
+            </if>
+            <if test="isTelephone != null">
+                is_telephone,
+            </if>
+            <if test="isTwice != null">
+                is_twice,
+            </if>
+            <if test="currentServicer != null">
+                current_servicer,
+            </if>
+            <if test="planformId != null">
+                planform_id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="remarkBeiZhu != null">
+                remark_beizhu,
+            </if>
+            <if test="provinceNum != null">
+                province_num,
+            </if>
+            <if test="cityNum != null">
+                city_num,
+            </if>
+            <if test="salesman != null">
+                salesman,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="consultDate != null">
+                #{consultDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="typeId != null">
+                #{typeId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null">
+                #{channelId,jdbcType=INTEGER},
+            </if>
+            <if test="telephone != null">
+                #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="wangwang != null">
+                #{wangwang,jdbcType=VARCHAR},
+            </if>
+            <if test="storeName != null">
+                #{storeName,jdbcType=VARCHAR},
+            </if>
+            <if test="storeUrl != null">
+                #{storeUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="weixin != null">
+                #{weixin,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="levelId != null">
+                #{levelId,jdbcType=INTEGER},
+            </if>
+            <if test="isTelephone != null">
+                #{isTelephone,jdbcType=BIT},
+            </if>
+            <if test="isTwice != null">
+                #{isTwice,jdbcType=BIT},
+            </if>
+            <if test="currentServicer != null">
+                #{currentServicer,jdbcType=VARCHAR},
+            </if>
+            <if test="planformId != null">
+                #{planformId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remarkBeiZhu != null">
+                #{remarkBeiZhu,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceNum != null">
+                #{provinceNum,jdbcType=VARCHAR},
+            </if>
+            <if test="cityNum != null">
+                #{cityNum,jdbcType=VARCHAR},
+            </if>
+            <if test="salesman != null">
+                #{salesman,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hhlt.konsultado.entity.ConsultData">
+        update consult_data
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=TIMESTAMP},
+            </if>
+            <if test="consultDate != null">
+                consult_date = #{consultDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="typeId != null">
+                type_id = #{typeId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null">
+                channel_id = #{channelId,jdbcType=INTEGER},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="wangwang != null">
+                wangwang = #{wangwang,jdbcType=VARCHAR},
+            </if>
+            <if test="storeName != null">
+                store_name = #{storeName,jdbcType=VARCHAR},
+            </if>
+            <if test="storeUrl != null">
+                store_url = #{storeUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="weixin != null">
+                weixin = #{weixin,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                qq = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="levelId != null">
+                level_id = #{levelId,jdbcType=INTEGER},
+            </if>
+            <if test="isTelephone != null">
+                is_telephone = #{isTelephone,jdbcType=BIT},
+            </if>
+            <if test="isTwice != null">
+                is_twice = #{isTwice,jdbcType=BIT},
+            </if>
+            <if test="currentServicer != null">
+                current_servicer = #{currentServicer,jdbcType=VARCHAR},
+            </if>
+            <if test="planformId != null">
+                planform_id = #{planformId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=BIT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remarkBeiZhu != null">
+                remark_beizhu = #{remarkBeiZhu,jdbcType=VARCHAR},
+            </if>
+            <if test="provinceNum != null">
+                province_num = #{provinceNum,jdbcType=VARCHAR},
+            </if>
+            <if test="cityNum != null">
+                city_num = #{cityNum,jdbcType=VARCHAR},
+            </if>
+            <if test="salesman != null">
+                salesman = #{salesman,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.hhlt.konsultado.entity.ConsultData">
+        update consult_data
+        set `name`           = #{name,jdbcType=TIMESTAMP},
+            consult_date     = #{consultDate,jdbcType=TIMESTAMP},
+            type_id          = #{typeId,jdbcType=INTEGER},
+            channel_id       = #{channelId,jdbcType=INTEGER},
+            telephone        = #{telephone,jdbcType=VARCHAR},
+            province         = #{province,jdbcType=VARCHAR},
+            city             = #{city,jdbcType=VARCHAR},
+            wangwang         = #{wangwang,jdbcType=VARCHAR},
+            store_name       = #{storeName,jdbcType=VARCHAR},
+            store_url        = #{storeUrl,jdbcType=VARCHAR},
+            weixin           = #{weixin,jdbcType=VARCHAR},
+            qq               = #{qq,jdbcType=VARCHAR},
+            remark           = #{remark,jdbcType=VARCHAR},
+            level_id         = #{levelId,jdbcType=INTEGER},
+            is_telephone     = #{isTelephone,jdbcType=BIT},
+            is_twice         = #{isTwice,jdbcType=BIT},
+            current_servicer = #{currentServicer,jdbcType=VARCHAR},
+            planform_id      = #{planformId,jdbcType=INTEGER},
+            status           = #{status,jdbcType=BIT},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            update_time      = #{updateTime,jdbcType=TIMESTAMP},
+            remark_beizhu    = #{remarkBeiZhu,jdbcType=VARCHAR},
+            province_num     = #{provinceNum,jdbcType=VARCHAR},
+            city_num         = #{cityNum,jdbcType=VARCHAR},
+            salesman         = #{salesman,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="list" resultType="com.hhlt.konsultado.response.ConsultDataResponse">
+        select c.id,c.name ,c.consult_date as consultDate, c.type_id ,t.type as businessType ,
+        c.channel_id ,cc.channel as channel,c.create_time,
+        c.level_id ,l.level as levelName,c.telephone,c.province,c.city,c.wangwang,c.store_name,c.store_url,
+        c.weixin,c.qq,c.remark,c.is_telephone,c.is_twice,c.current_servicer,c.planform_id,p.platform_name as
+        platName,c.remark_beizhu,c.province_num,c.city_num,c.salesman
+        from consult_data c
+        LEFT JOIN business_type t on c.type_id = t.id
+        left join customer_level l on c.level_id = l.id
+        left join consulting_channel cc on c.channel_id = cc.id
+        left join platform_information p on c.planform_id = p.id
+        where 1=1
+        <if test="beginTime != null and beginTime != ''">
+            and c.consult_date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and c.consult_date &lt;= #{endTime}
+        </if>
+        <if test="servicer != null and servicer != ''">
+            and c.current_servicer like concat(concat("%",#{servicer}),"%")
+        </if>
+        <if test="typeId != null and typeId != ''">
+            and c.type_id = #{typeId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            and c.channel_id = #{channelId}
+        </if>
+        <if test="planformId != null and planformId != ''">
+            and c.planform_id = #{planformId}
+        </if>
+        <if test="search != null and search != ''">
+            and (c.telephone like concat(concat("%",#{search}),"%") or c.weixin like concat(concat("%",#{search}),"%")
+            or c.qq like concat(concat("%",#{search}),"%") or c.city like concat(concat("%",#{search}),"%")
+            or c.wangwang like concat(concat("%",#{search}),"%") or c.remark like concat(concat("%",#{search}),"%")
+            or c.store_name like concat(concat("%",#{search}),"%"))
+        </if>
+        order by c.consult_date desc , c.create_time desc limit #{pageNo},#{pageSize}
+    </select>
+
+    <select id="get" resultType="com.hhlt.konsultado.response.ConsultDataResponse">
+        select c.id,
+               c.name,
+               c.consult_date  as consultDate,
+               c.type_id,
+               t.type          as businessType,
+               c.channel_id,
+               cc.channel      as channel,
+               c.create_time,
+               c.level_id,
+               l.level         as levelName,
+               c.telephone,
+               c.province,
+               c.city,
+               c.wangwang,
+               c.store_name,
+               c.store_url,
+               c.weixin,
+               c.qq,
+               c.remark,
+               c.is_telephone,
+               c.is_twice,
+               c.current_servicer,
+               c.planform_id,
+               p.platform_name as platName,
+               c.remark_beizhu,
+               c.remark_beizhu,
+               c.province_num,
+               c.city_num,
+               c.salesman
+        from consult_data c
+                 LEFT JOIN business_type t on c.type_id = t.id
+                 left join customer_level l on c.level_id = l.id
+                 left join consulting_channel cc on c.channel_id = cc.id
+                 left join platform_information p on c.planform_id = p.id
+        where 1 = 1
+          and c.id = #{id}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from consult_data
+        where 1=1
+        <if test="beginTime != null and beginTime != ''">
+            and consult_date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and consult_date &lt;= #{endTime}
+        </if>
+        <if test="servicer != null and servicer != ''">
+            and current_servicer like concat(concat("%",#{servicer}),"%")
+        </if>
+        <if test="typeId != null and typeId != ''">
+            and type_id = #{typeId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            and channel_id = #{channelId}
+        </if>
+        <if test="planformId != null and planformId != ''">
+            and planform_id = #{planformId}
+        </if>
+        <if test="search != null and search != ''">
+            and (telephone like concat(concat("%",#{search}),"%") or weixin like concat(concat("%",#{search}),"%")
+            or qq like concat(concat("%",#{search}),"%") or city like concat(concat("%",#{search}),"%")
+            or wangwang like concat(concat("%",#{search}),"%") or remark like concat(concat("%",#{search}),"%")
+            or store_name like concat(concat("%",#{search}),"%"))
+        </if>
+    </select>
+
+    <select id="monthDataCount" resultType="java.lang.Integer">
+        select count(*)
+        from consult_data
+        where date_format(consult_date, '%Y-%m') like #{monthStr} and type_id = '3'
+    </select>
+
+    <select id="platformNums" resultType="com.hhlt.konsultado.response.PlatformNum">
+        select p.id as platId, p.platform_name as platformName, count(*) as number
+        from consult_data c
+                 left join platform_information p on c.planform_id = p.id
+        where date_format(consult_date, '%Y-%m') like #{monthStr}
+        AND c.type_id = '3'
+        group by c.planform_id
+    </select>
+
+    <select id="excelList" resultType="com.hhlt.konsultado.response.ConsultDataResponse">
+        select c.name ,c.consult_date as consultDate, c.type_id ,t.type as businessType ,
+        c.channel_id ,cc.channel as channel,c.create_time,
+        c.level_id ,l.level as levelName,c.telephone,c.province,c.city,c.wangwang,c.store_name,c.store_url,
+        c.weixin,c.qq,c.remark,c.is_telephone,c.is_twice,c.current_servicer,c.planform_id,p.platform_name as platName,
+        c.remark_beizhu,c.remark_beizhu,c.province_num,c.city_num,c.salesman
+        from consult_data c
+        LEFT JOIN business_type t on c.type_id = t.id
+        left join customer_level l on c.level_id = l.id
+        left join consulting_channel cc on c.channel_id = cc.id
+        left join platform_information p on c.planform_id = p.id
+        where 1=1
+        <if test="beginTime != null and beginTime != ''">
+            and c.consult_date &gt;= #{beginTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and c.consult_date &lt;= #{endTime}
+        </if>
+        <if test="servicer != null and servicer != ''">
+            and c.current_servicer like concat(concat("%",#{servicer}),"%")
+        </if>
+        <if test="typeId != null and typeId != ''">
+            and c.type_id = #{typeId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            and c.channel_id = #{channelId}
+        </if>
+        <if test="search != null and search != ''">
+            and (c.telephone like concat(concat("%",#{search}),"%") or c.weixin like concat(concat("%",#{search}),"%")
+            or c.qq like concat(concat("%",#{search}),"%") or c.city like concat(concat("%",#{search}),"%")
+            or c.wangwang like concat(concat("%",#{search}),"%") or c.remark like concat(concat("%",#{search}),"%")
+            or c.store_name like concat(concat("%",#{search}),"%"))
+        </if>
+        order by c.consult_date desc , c.create_time desc
+    </select>
+
+    <!--&#45;&#45;         count(case when c.channel = '自营网店'   then '自营网店'  end) as ziyingwd,-->
+<!--    count(case when c.channel = '思路网' then '思路网' end) as thinkingNet,-->
+<!--    count(case when c.channel = '京标标' then '京标标' end) as jbb,-->
+<!--    count(case when c.channel = '京麦服务市场' then '京麦服务市场' end) as jmService1,-->
+    <select id="consultCount" resultType="com.hhlt.konsultado.response.ConsultCountResponse">
+        SELECT
+        '咨询量' as qudao,
+        count(case when c.channel = 'AMP营销拍档' then 'AMP营销拍档' end) as amp,
+        count(case when c.channel = '官网' then '官网' end) as beijingBd,
+        count(case when c.channel = '北京官网(360)' then '北京官网(360)' end) as beijing360,
+        count(case when c.channel = '青岛官网' then '青岛官网' end) as qingdaoBd,
+        count(case when c.channel = '青岛官网(360)' then '青岛官网(360)' end) as qingdao360,
+        count(case when c.channel = '今日头条' then '今日头条' end) as jinri,
+        count(case when c.channel = '自营网店瓣装女装' then '自营网店瓣装女装' end) as zyyz,
+        count(case when c.channel = '订购平台' then '订购平台' end) as dgpt,
+        count(case when c.channel = '洪海服务市场' then '洪海服务市场' end) as bjService1,
+        count(case when c.channel = '自营网店洪海青岛' then '自营网店洪海青岛' end) as zywdqd,
+        count(case when c.channel = '科大服务市场' then '科大服务市场' end) as kdfwsc,
+        count(case when c.channel = '其他' then '其他' end) as qita
+        FROM consult_data a
+        INNER JOIN consulting_channel c on a.channel_id = c.id
+        where 1=1
+        <if test="beginTime != null and beginTime != '' and endTime!=null  and endTime!=''">
+            and a.consult_date between #{beginTime} and #{endTime}
+        </if>
+        <if test="id != null and id != ''">
+            and a.channel_id = #{id}
+        </if>
+    </select>
+
+    <select id="countPlatformBusiness" resultType="com.hhlt.konsultado.response.CountPlatBusinessResponse">
+        (select
+        aa.platform_name as name,
+        sum(IF(aa.type_id="1", aa.counts, 0)) as throughTrain,
+        sum(IF(aa.type_id="2", aa.counts, 0)) as zz,
+        sum(IF(aa.type_id="3", aa.counts, 0)) as dOperating,
+        sum(IF(aa.type_id="4", aa.counts, 0)) as jdOperating,
+        sum(IF(aa.type_id="5", aa.counts, 0)) as cjtj,
+        sum(IF(aa.type_id="6", aa.counts, 0)) as jzt,
+        sum(IF(aa.type_id="7", aa.counts, 0)) as pdd,
+        sum(IF(aa.type_id="8", aa.counts, 0)) as decorate,
+        sum(IF(aa.type_id="9", aa.counts, 0)) as photography,
+        sum(IF(aa.type_id="10", aa.counts, 0)) as server,
+        sum(IF(aa.type_id="11", aa.counts, 0)) as content,
+        sum(IF(aa.type_id="12", aa.counts, 0)) as software,
+        sum(IF(aa.type_id="13", aa.counts, 0)) as shopDiagnosis,
+        sum(IF(aa.type_id="14", aa.counts, 0)) as training,
+        sum(IF(aa.type_id="15", aa.counts, 0)) as drz,
+        sum(IF(aa.type_id="16", aa.counts, 0)) as other,
+        sum(aa.counts) as total
+        from (
+        select c.type_id, COUNT(c.type_id) as counts, p.platform_name,c.consult_date from platform_information p LEFT
+        JOIN consult_data c on c.planform_id = p.id
+        LEFT join business_type b on b.id = c.type_id
+        <if test="beginTime != null and beginTime != '' and endTime!=null  and endTime!=''">
+            where c.consult_date between #{beginTime} and #{endTime}
+        </if>
+        GROUP BY type_id,platform_name,consult_date
+        ) as aa
+        GROUP BY name
+        )
+
+        union ALL
+        (select
+        '合计',sum(throughTrain),sum(zz),sum(dOperating),sum(jdOperating),sum(cjtj),sum(jzt),sum(pdd),sum(decorate),sum(photography),sum(server),sum(content),sum(software),sum(shopDiagnosis),sum(training),sum(drz),sum(other),sum(total)
+        from
+        (select
+        aa.platform_name as name,
+        sum(IF(aa.type_id="1", aa.counts, 0)) as throughTrain,
+        sum(IF(aa.type_id="2", aa.counts, 0)) as zz,
+        sum(IF(aa.type_id="3", aa.counts, 0)) as dOperating,
+        sum(IF(aa.type_id="4", aa.counts, 0)) as jdOperating,
+        sum(IF(aa.type_id="5", aa.counts, 0)) as cjtj,
+        sum(IF(aa.type_id="6", aa.counts, 0)) as jzt,
+        sum(IF(aa.type_id="7", aa.counts, 0)) as pdd,
+        sum(IF(aa.type_id="8", aa.counts, 0)) as decorate,
+        sum(IF(aa.type_id="9", aa.counts, 0)) as photography,
+        sum(IF(aa.type_id="10", aa.counts, 0)) as server,
+        sum(IF(aa.type_id="11", aa.counts, 0)) as content,
+        sum(IF(aa.type_id="12", aa.counts, 0)) as software,
+        sum(IF(aa.type_id="13", aa.counts, 0)) as shopDiagnosis,
+        sum(IF(aa.type_id="14", aa.counts, 0)) as training,
+        sum(IF(aa.type_id="15", aa.counts, 0)) as drz,
+        sum(IF(aa.type_id="16", aa.counts, 0)) as other,
+        sum(aa.counts) as total
+        from (
+        select c.type_id, COUNT(c.type_id) as counts, p.platform_name from platform_information p LEFT JOIN consult_data
+        c on c.planform_id = p.id
+        LEFT join business_type b on b.id = c.type_id
+        <if test="beginTime != null and beginTime != '' and endTime!=null  and endTime!=''">
+            where c.consult_date between #{beginTime} and #{endTime}
+        </if>
+        GROUP BY type_id,platform_name,consult_date
+        ) as aa
+        GROUP BY name) aaa)
+    </select>
+
+    <select id="countChannelBusiness" resultType="com.hhlt.konsultado.response.CountPlatBusinessResponse">
+        (select
+        aa.channel as name,
+        sum(IF(aa.type_id="1", aa.counts, 0)) as throughTrain,
+        sum(IF(aa.type_id="2", aa.counts, 0)) as zz,
+        sum(IF(aa.type_id="3", aa.counts, 0)) as dOperating,
+        sum(IF(aa.type_id="4", aa.counts, 0)) as jdOperating,
+        sum(IF(aa.type_id="5", aa.counts, 0)) as cjtj,
+        sum(IF(aa.type_id="6", aa.counts, 0)) as jzt,
+        sum(IF(aa.type_id="7", aa.counts, 0)) as pdd,
+        sum(IF(aa.type_id="8", aa.counts, 0)) as decorate,
+        sum(IF(aa.type_id="9", aa.counts, 0)) as photography,
+        sum(IF(aa.type_id="10", aa.counts, 0)) as server,
+        sum(IF(aa.type_id="11", aa.counts, 0)) as content,
+        sum(IF(aa.type_id="12", aa.counts, 0)) as software,
+        sum(IF(aa.type_id="13", aa.counts, 0)) as shopDiagnosis,
+        sum(IF(aa.type_id="14", aa.counts, 0)) as training,
+        sum(IF(aa.type_id="15", aa.counts, 0)) as drz,
+        sum(IF(aa.type_id="16", aa.counts, 0)) as other,
+        sum(aa.counts) as total
+        from (
+        select c.type_id, COUNT(c.type_id) as counts, p.channel,c.consult_date from consulting_channel p LEFT JOIN
+        consult_data c on c.channel_id = p.id
+        LEFT join business_type b on b.id = c.type_id
+        <if test="beginTime != null and beginTime != '' and endTime!=null  and endTime!=''">
+            where c.consult_date between #{beginTime} and #{endTime}
+        </if>
+        GROUP BY type_id,channel,consult_date
+        ) as aa
+        GROUP BY channel
+        )
+
+        union ALL
+        (select
+        '合计',sum(throughTrain),sum(zz),sum(dOperating),sum(jdOperating),sum(cjtj),sum(jzt),sum(pdd),sum(decorate),sum(photography),sum(server),sum(content),sum(software),sum(shopDiagnosis),sum(training),sum(drz),sum(other),sum(total)
+        from
+        (select
+        aa.channel as name,
+        sum(IF(aa.type_id="1", aa.counts, 0)) as throughTrain,
+        sum(IF(aa.type_id="2", aa.counts, 0)) as zz,
+        sum(IF(aa.type_id="3", aa.counts, 0)) as dOperating,
+        sum(IF(aa.type_id="4", aa.counts, 0)) as jdOperating,
+        sum(IF(aa.type_id="5", aa.counts, 0)) as cjtj,
+        sum(IF(aa.type_id="6", aa.counts, 0)) as jzt,
+        sum(IF(aa.type_id="7", aa.counts, 0)) as pdd,
+        sum(IF(aa.type_id="8", aa.counts, 0)) as decorate,
+        sum(IF(aa.type_id="9", aa.counts, 0)) as photography,
+        sum(IF(aa.type_id="10", aa.counts, 0)) as server,
+        sum(IF(aa.type_id="11", aa.counts, 0)) as content,
+        sum(IF(aa.type_id="12", aa.counts, 0)) as software,
+        sum(IF(aa.type_id="13", aa.counts, 0)) as shopDiagnosis,
+        sum(IF(aa.type_id="14", aa.counts, 0)) as training,
+        sum(IF(aa.type_id="15", aa.counts, 0)) as drz,
+        sum(IF(aa.type_id="16", aa.counts, 0)) as other,
+        sum(aa.counts) as total
+        from (
+        select c.type_id, COUNT(c.type_id) as counts, p.channel from consulting_channel p LEFT JOIN consult_data c on
+        c.channel_id = p.id
+        LEFT join business_type b on b.id = c.type_id
+        <if test="beginTime != null and beginTime != '' and endTime!=null  and endTime!=''">
+            where c.consult_date between #{beginTime} and #{endTime}
+        </if>
+        GROUP BY type_id,channel,consult_date
+        ) as aa
+        GROUP BY channel) aaa)
+
+    </select>
+<select id="telephone" resultMap="BaseResultMap" parameterType="java.lang.String">
+    SELECT c.telephone,c.create_time,c.qq,c.weixin from consult_data as c
+    <trim prefix="where" prefixOverrides="or">
+    <if test="telephone != null and telephone != ''">
+        c.telephone = #{telephone}
+    </if>
+    <if test="qq != null and qq != ''">
+        or c.qq = #{qq}
+    </if>
+    <if test="weixin != null and weixin != ''">
+        or c.weixin = #{weixin}
+    </if>
+    <if test="wangwang != null and wangwang != ''">
+        or c.wangwang = #{wangwang}
+    </if>
+    </trim>
+</select>
+
+    <select id="countS" resultType="java.lang.Integer">
+        select count(*) from consult_data
+        where 1=1
+        <if test="time != null and time != ''">
+            and consult_date = #{time}
+        </if>
+        <if test="typeId != null and typeId != ''">
+            and type_id = #{typeId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            and channel_id = #{channelId}
+        </if>
+    </select>
+    <select id="countA" resultType="java.lang.Integer">
+        select count(*) from consult_data
+        where name = '无效'
+        <if test="time != null and time != ''">
+            and consult_date = #{time}
+        </if>
+        <if test="typeId != null and typeId != ''">
+            and type_id = #{typeId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            and channel_id = #{channelId}
+        </if>
+    </select>
+    <select id="countYouXiao" resultType="java.lang.Integer">
+        select count(*) from consult_data
+        where name != '无效'
+        <if test="time != null and time != ''">
+            and consult_date = #{time}
+        </if>
+        <if test="typeId != null and typeId != ''">
+            and type_id = #{typeId}
+        </if>
+        <if test="channelId != null and channelId != ''">
+            and channel_id = #{channelId}
+        </if>
+    </select>
+</mapper>

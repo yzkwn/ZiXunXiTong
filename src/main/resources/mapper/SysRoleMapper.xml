@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hhlt.konsultado.mapper.SysRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.hhlt.konsultado.entity.SysRole" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, description, createTime, updateTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from sys_role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sys_role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.hhlt.konsultado.entity.SysRole" >
+    insert into sys_role (id, name, description, 
+      createTime, updateTime)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hhlt.konsultado.entity.SysRole" >
+    insert into sys_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createtime != null" >
+        createTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hhlt.konsultado.entity.SysRole" >
+    update sys_role
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hhlt.konsultado.entity.SysRole" >
+    update sys_role
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getRole" resultType="com.hhlt.konsultado.entity.SysRole">
+    select * from sys_role t where t.name = #{name}
+  </select>
+
+  <insert id="saveRolePermission">
+    insert into sys_role_permission(roleId, permissionId) values
+    <foreach collection="permissionIds" item="permissionId"
+             separator=",">
+      (#{roleId}, #{permissionId})
+    </foreach>
+  </insert>
+
+  <delete id="deleteRolePermission">
+    delete from sys_role_permission where roleId = #{roleId}
+  </delete>
+
+  <delete id="deleteRoleUser">
+    delete from sys_role_user where roleId = #{roleId}
+  </delete>
+
+  <sql id="where">
+    <where>
+      <if test="params.name != null and params.name != ''">
+        and t.name like concat('%', #{params.name}, '%')
+      </if>
+    </where>
+  </sql>
+
+  <select id="count" resultType="int">
+    select count(1) from sys_role t
+    <include refid="where" />
+  </select>
+
+  <select id="list" resultType="com.hhlt.konsultado.entity.SysRole">
+    select * from sys_role t
+    <include refid="where" />
+    ${params.orderBy}
+    <if test="offset != null and offset >= 0 and limit != null and limit >= 0">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <select id="listByUserId"  resultType="com.hhlt.konsultado.entity.SysRole">
+    select * from sys_role r inner join sys_role_user ru on r.id = ru.roleId where ru.userId = #{userId}
+  </select>
+</mapper>

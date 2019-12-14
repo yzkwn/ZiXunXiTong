@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" th:href="@{/css/font.css}" type="text/css">
+    <link rel="stylesheet" th:href="@{/css/xadmin.css}" type="text/css">
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/layui/layui.js}" charset="utf-8"></script>
+    <script type="text/javascript" th:src="@{/js/xadmin.js}"></script>
+    <script type="text/javascript" th:src="@{/js/returnFloat.js}"></script>
+    <script type="text/javascript" th:src="@{/js/downFile.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/my/permission.js}"></script>
+    <script type="text/javascript" th:src="@{/js1/jq.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">花费数据</a>
+        <a>
+          <cite>渠道花费数据</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-primary layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:38px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <div class="layui-form layui-col-md12 x-so">
+            <div class="layui-input-inline" id="changeChannel">
+                <select class="form-control" name="channels" id="channels">
+                    <option th:value="null" th:text="请选择咨询渠道">--请选择咨询渠道--</option>
+                    <option th:each="ch:${list}" th:value="${ch.id}" th:text="${ch.channel }"></option>
+                </select>
+            </div>
+            <button class="layui-btn" onclick="selectOrder(1,20);" permission="sys : insert"><i class="layui-icon" permission="sys : insert">&#xe615;</i></button>
+            <input type="button" class="layui-btn x-right" lay-filter="add" permission="sys:qudao"
+                   onclick="admin_show('添加渠道花费数据','/konsult/channelSpend/add')" id="button" value="添加"/>
+        </div>
+    </div>
+    <xblock>
+        <span class="x-right" style="line-height:40px">共：<span id="total"></span>条</span>
+    </xblock>
+    <table class="layui-table" width="auto" style="white-space:nowrap" id="tshow">
+
+        <thead>
+        <tr>
+            <th>时间</th>
+            <th>渠道</th>
+            <th>期初金额</th>
+            <th>充值金额</th>
+            <th>总花费</th>
+            <th>余额</th>
+            <!--<th>操作</th>-->
+        </tr>
+        </thead>
+        <tbody class="information">
+
+        </tbody>
+    </table>
+    <div class="page">
+        <div id="demo1"></div>
+    </div>
+
+</div>
+
+<script>
+    var pers = checkPermission();
+
+    $(document).ready(function () {
+        selectOrder(1, 20);
+    });
+
+    function fenye(total, curr, limit) {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+            //总页数大于页码总数
+            laypage.render({
+                elem: 'demo1'
+                , count: total || 0 //数据总数
+                , limit: limit || 10
+                , curr: curr || 1
+                , jump: function (obj, first) {
+                    if (!first) {
+                        selectOrder(obj.curr, obj.limit);
+                    }
+                }
+            });
+        });
+    }
+
+
+    function selectOrder(page, size) {
+    // debugger;
+        var result = '';
+        var channeid = $("#channels option:selected").val();
+        if (channeid != "" && channeid != null) {
+            $.ajax({
+                method: "post",
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                url: "/konsult/channelSpend/PopoutSerach",
+                dataType: 'json',
+                data: {
+                    "channelId": channeid,
+                    "pageNum": page,
+                    "pageSize": size
+                },
+                success: function (data) {
+                // debugger;
+                    $("#tshow").empty();
+                    var html = ' <table class="layui-table" width="auto" style="white-space:nowrap" id="tshow">' +
+                        '<thead>' +
+                        '<tr>' +
+                        ' <th>日期</th>' +
+                        '<th>渠道</th>' +
+                        '<th>期初金额</th>' +
+                        '<th>充值金额</th>' +
+                        // '<th>总花费</th>' +
+                        // '<th>余额</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        ' <tbody class="information">' +
+                        '</tbody>' +
+                        '<thead class="informationL">' +
+                        '<tr>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '</table>'
+                    $("#tshow").append(html);
+                    var list = data.data;
+                    var count = data.count;
+
+                    if (list.length > 0) {
+                        for (var i = 0; i < list.length; i++) {
+                            result += '<tr>' +
+                                '<td>' + list[i].date.toString().split(" ")[0] + '</td>' +
+                                '<td>' + list[i].channel + '</td>' +
+                                '<td>' +  returnFloat(list[i].openingAmount) + '</td>' +
+                                '<td>' + returnFloat(list[i].rechargeAmount) + '</td>' +
+                                // '<td>' +  returnFloat(list[i].totalCharger) + '</td>' +
+                                // '<td>' +  returnFloat(list[i].balance) + '</td>' +
+                                '</tr>'
+                        }
+
+                        $(".information").html(result);
+                        fenye(count, page, size);
+                        $("#total").html(count);
+                    } else {
+                        $(".information").html("");
+                        $("#total").html(0);
+                        fenye(0, page, size);
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                method: "post",
+                headers: {
+                    "contentType": "application/json;charset=UTF-8"
+                },
+                url: "/konsult/channelSpend/listSearch",
+                dataType: 'json',
+                data: {
+                    "channelId": $("#channels option:selected").val(),
+                },
+                success: function (data) {
+                    var arrLen = data.data;
+                    $("#tshow").empty();
+                    var html = ' <table class="layui-table" width="auto" style="white-space:nowrap" id="tshow">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>时间</th>' +
+                        '<th>渠道</th>' +
+                        '<th>期初金额</th>' +
+                        '<th>充值金额</th>' +
+                        '<th>总花费</th>' +
+                        '<th>余额</th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        ' <tbody class="information">' +
+                        '</tbody>' +
+                        '<thead class="informationL">' +
+                        '<tr>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '</table>'
+                    $("#tshow").append(html);
+                    if (arrLen.length > 0) {
+                        for (var i = 0; i < arrLen.length; i++) {
+                            if (arrLen[i].totalCharger == null) {
+                                arrLen[i].totalCharger = 0;
+                                arrLen[i].balance = arrLen[i].openingAmount + arrLen[i].rechargeAmount;
+                            }
+                            result += '<tr>' +
+                                '<td>' + arrLen[i].date.toString().split(" ")[0] + '</td>' +
+                                '<td>' + arrLen[i].channel + '</td>' +
+                                '<td>' + returnFloat(arrLen[i].openingAmount) + '</td>' +
+                                '<td>' + returnFloat(arrLen[i].rechargeAmount) + '</td>' +
+                                '<td>' + returnFloat(arrLen[i].totalCharger) + '</td>' +
+                                '<td>' + returnFloat(arrLen[i].balance) + '</td>' +
+                                // '<td>' +
+                                // '<button class="layui-btn layui-btn-xs" title="查看详情" onclick="admin_show(\'渠道详情\',\'/konsult/channelSpend/Popout?id='+arrLen[i].id+'\')"><i class="layui-icon">&#xe642;</i>' + '</td>' +
+                                '</tr>'
+                        }
+                        $("#demo1").empty();
+                        $(".information").html(result);
+                        $("#total").html(arrLen.length);
+                    } else {
+                        $(".information").html("");
+                        $("#total").html(0);
+                    }
+                }
+            })
+        }
+
+    }
+
+
+    function admin_show(title, url) {
+        x_admin_show(title, url);
+    }
+
+</script>
+</body>
+</html>
